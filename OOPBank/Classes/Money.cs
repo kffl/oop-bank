@@ -2,7 +2,7 @@ namespace OOPBank
 {
     public class Money
     {
-        private long Amount { get; set; }
+        public long Amount { get; }
 
         public Money()
         {
