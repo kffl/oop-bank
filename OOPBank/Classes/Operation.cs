@@ -37,7 +37,7 @@ namespace OOPBank
         public void displayOperationDetails()
         {
             Console.WriteLine("### Operation details ###");
-            Console.WriteLine("ID: {O}", ID);
+            Console.WriteLine("ID: " + ID.ToString());
             Console.WriteLine("From account: {0}", fromAccount.accountNumber);
             Console.WriteLine("To account: {0}", toAccount.accountNumber);
             Console.WriteLine("Amount: {0}", money.Amount);
