@@ -78,15 +78,15 @@ namespace OOPBank
             {
                 //it's an external transfer
                 if (fromAccount.hasSufficientBalance(amount))
-                    {
-                        ExternalOperation newOperation = new ExternalOperation(fromAccount, new Account(toAccountNumber), amount);
-                        newOperation.setOperationStatus(Operation.OperationStatus.PendingCompletion);
-                        fromAccount.bookOutgoingOperation(newOperation);
-                        var IBPA = InterBankPaymentAgency.getInterBankPaymentAgency();
-                        var transactionID = IBPA.performInterBankTransfer(fromAccount.accountNumber, this, toAccountNumber, amount);
-                        newOperation.IBPAID = transactionID;
-                        pendingExternalOperations.Add(newOperation);
-                    }
+                {
+                    ExternalOperation newOperation = new ExternalOperation(fromAccount, new Account(toAccountNumber), amount);
+                    newOperation.setOperationStatus(Operation.OperationStatus.PendingCompletion);
+                    fromAccount.bookOutgoingOperation(newOperation);
+                    var IBPA = InterBankPaymentAgency.getInterBankPaymentAgency();
+                    var transactionID = IBPA.performInterBankTransfer(fromAccount.accountNumber, this, toAccountNumber, amount);
+                    newOperation.IBPAID = transactionID;
+                    pendingExternalOperations.Add(newOperation);
+                }
             }
         }
 

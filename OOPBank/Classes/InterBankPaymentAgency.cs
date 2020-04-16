@@ -30,7 +30,8 @@ namespace OOPBank
                 status = PaymentStatus.InTransfer;
                 ID = ++IBPCounter;
             }
-            public void processPayment() {
+            public void processPayment()
+            {
                 var result = toBank.handleIncomingPayment(fromAccountNumber, toAccountNumber, amount);
                 if (result)
                 {

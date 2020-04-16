@@ -24,18 +24,18 @@ namespace OOPBank
         public void bookOutgoingOperation(Operation operation)
         {
             outgoingOperations.Add(operation);
-            balance = balance-operation.money;
+            balance = balance - operation.money;
         }
 
         public void bookIncomingOperation(Operation operation)
         {
             incomingOperations.Add(operation);
-            balance = balance+operation.money;
+            balance = balance + operation.money;
         }
 
         public void rollbackOutgoingOperaion(Operation operation)
         {
-            balance = balance+operation.money;
+            balance = balance + operation.money;
         }
 
         public Money getBalance()
