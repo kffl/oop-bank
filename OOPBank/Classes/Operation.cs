@@ -31,15 +31,26 @@ namespace OOPBank
             this.toAccount = toAccount;
             ID = ++lastId;
             dateOfExecution = new DateTime();
-            this.status = OperationStatus.Disposed;
+            status = OperationStatus.Disposed;
+        }
+
+        public Operation(Account fromAccount, Money money)
+        {
+            this.money = money;
+            this.fromAccount = fromAccount;
+            toAccount = null;
+            ID = ++lastId;
+            dateOfExecution = new DateTime();
+            status = OperationStatus.Disposed;
         }
 
         public void displayOperationDetails()
         {
             Console.WriteLine("### Operation details ###");
-            Console.WriteLine("ID: " + ID.ToString());
+            Console.WriteLine("ID: " + ID);
             Console.WriteLine("From account: {0}", fromAccount.accountNumber);
-            Console.WriteLine("To account: {0}", toAccount.accountNumber);
+            if (toAccount != null)
+                Console.WriteLine("To account: {0}", toAccount.accountNumber);
             Console.WriteLine("Amount: {0}", money.Amount);
             Console.WriteLine("#########################");
         }

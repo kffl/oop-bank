@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace OOPBank
 {
@@ -10,24 +10,28 @@ namespace OOPBank
         protected Customer owner;
         protected Money balance { get; set; }
 
+        public LocalAccount()
+        {
+        }
+
         public LocalAccount(Customer owner, string number, long startingBalance) : base(number)
         {
             this.owner = owner;
             balance = new Money(startingBalance);
         }
 
-        public bool hasSufficientBalance(Money money)
+        public virtual bool hasSufficientBalance(Money money)
         {
             return (balance - money).Amount >= 0;
         }
 
-        public void bookOutgoingOperation(Operation operation)
+        public virtual void bookOutgoingOperation(Operation operation)
         {
             outgoingOperations.Add(operation);
             balance = balance - operation.money;
         }
 
-        public void bookIncomingOperation(Operation operation)
+        public virtual void bookIncomingOperation(Operation operation)
         {
             incomingOperations.Add(operation);
             balance = balance + operation.money;
@@ -43,7 +47,7 @@ namespace OOPBank
             return balance;
         }
 
-        public void displayAccountDetails()
+        public virtual void displayAccountDetails()
         {
             Console.WriteLine("###  Account details  ###");
             Console.WriteLine("Number: " + accountNumber);
@@ -55,15 +59,9 @@ namespace OOPBank
         {
             Console.WriteLine("###  Account history  ###");
             Console.WriteLine("####Incoming history ####");
-            foreach (var operation in incomingOperations)
-            {
-                operation.displayOperationDetails();
-            }
+            foreach (var operation in incomingOperations) operation.displayOperationDetails();
             Console.WriteLine("####Outgoing history ####");
-            foreach (var operation in outgoingOperations)
-            {
-                operation.displayOperationDetails();
-            }
+            foreach (var operation in outgoingOperations) operation.displayOperationDetails();
             Console.WriteLine("#########################");
         }
     }

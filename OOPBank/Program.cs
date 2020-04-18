@@ -15,16 +15,27 @@ namespace OOPBank
             Bank1.addCustomer(JohnDoe);
             SuperBank.addCustomer(AndrewSmith);
 
-            var JohnsAccount = Bank1.openAccount(JohnDoe, 1000);
+            var JohnsDebitAccount = Bank1.openDebitAccount(JohnDoe, 1000, 111);
+            var JohnsLoanAccount = Bank1.openLoanAccount(JohnDoe, 1000,234);
+            var JohnsDepositAccount = Bank1.openDebitAccount(JohnDoe, 1000, 123);
             var AndresSmithsAccount = SuperBank.openAccount(AndrewSmith, 2000);
-            JohnsAccount.displayAccountDetails();
+            
+            JohnsDebitAccount.displayAccountDetails();
+            JohnsLoanAccount.displayAccountDetails();
+            JohnsDepositAccount.displayAccountDetails();
             AndresSmithsAccount.displayAccountDetails();
 
-            Bank1.makeTransfer(JohnDoe, JohnsAccount, "SB00000002", new Money(100));
+            Bank1.makeTransfer(JohnDoe, JohnsDebitAccount, "SB00000004", new Money(99));
+            Bank1.chargeInstalment(JohnDoe, JohnsLoanAccount, new Money(100));
+            Bank1.takeLoan(JohnDoe, JohnsLoanAccount, new Money(400));
 
             var IBPA = InterBankPaymentAgency.getInterBankPaymentAgency();
             IBPA.processQueuedPayments();
+            JohnsDebitAccount.displayAccountDetails();
+            JohnsLoanAccount.displayAccountDetails();
+            JohnsDepositAccount.displayAccountDetails();
             AndresSmithsAccount.displayAccountDetails();
+            JohnsDebitAccount.displayHistory();
             AndresSmithsAccount.displayHistory();
         }
 
