@@ -11,16 +11,16 @@ namespace OOPBank
 		protected Money balance { get; set; }
 
 
-		public LocalAccount(Customer owner, string number, long startingBalance) : base(number)
+		public LocalAccount(Customer owner, string number, Money startingBalance) : base(number)
 		{
 			this.owner = owner;
-			balance = new Money(startingBalance);
+			balance = new Money(startingBalance.dollars, startingBalance.cents);
 		}
 
-		public virtual bool hasSufficientBalance(Money money)
-		{
-			return (balance - money).Amount >= 0;
-		}
+        public virtual bool hasSufficientBalance(Money money)
+        {
+            return balance - money >= 0;
+        }
 
 		public virtual void bookOutgoingOperation(Operation operation)
 		{
@@ -34,7 +34,7 @@ namespace OOPBank
 			balance = balance + operation.money;
 		}
 
-		public void rollbackOutgoingOperaion(Operation operation)
+		public void rollbackOutgoingOperation(Operation operation)
 		{
 			balance = balance + operation.money;
 		}
@@ -44,13 +44,13 @@ namespace OOPBank
 			return balance;
 		}
 
-		public virtual void displayAccountDetails()
-		{
-			Console.WriteLine("###  Account details  ###");
-			Console.WriteLine("Number: " + accountNumber);
-			Console.WriteLine("Balance: " + balance.Amount);
-			Console.WriteLine("#########################");
-		}
+        public virtual void displayAccountDetails()
+        {
+            Console.WriteLine("###  Account details  ###");
+            Console.WriteLine("Number: " + accountNumber);
+            Console.WriteLine("Balance: " + balance.asDouble);
+            Console.WriteLine("#########################");
+        }
 
 		public void displayHistory()
 		{

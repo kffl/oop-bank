@@ -51,7 +51,7 @@ namespace OOPBank
             Console.WriteLine("From account: {0}", fromAccount.accountNumber);
             if (toAccount != null)
                 Console.WriteLine("To account: {0}", toAccount.accountNumber);
-            Console.WriteLine("Amount: {0}", money.Amount);
+            Console.WriteLine("Amount: {0}", money.asDouble);
             Console.WriteLine("#########################");
         }
 

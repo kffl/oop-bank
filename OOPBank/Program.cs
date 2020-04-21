@@ -6,8 +6,6 @@ namespace OOPBank
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-
             var Bank1 = new Bank("Bank1", "B1");
             var SuperBank = new Bank("SuperBank", "SB");
             var JohnDoe = new Customer("John", "Doe");
@@ -15,28 +13,31 @@ namespace OOPBank
             Bank1.addCustomer(JohnDoe);
             SuperBank.addCustomer(AndrewSmith);
 
-            var JohnsDebitAccount = Bank1.openDebitAccount(JohnDoe, 1000, 111);
-            var JohnsLoanAccount = Bank1.openLoanAccount(JohnDoe, 1000,234);
-            var JohnsDepositAccount = Bank1.openDebitAccount(JohnDoe, 1000, 123);
-            var AndresSmithsAccount = SuperBank.openAccount(AndrewSmith, 2000);
+            var JohnsDebitAccount = Bank1.openDebitAccount(JohnDoe, new Money(1000, 99), new Money(111, 43));
+            var JohnsLoanAccount = Bank1.openLoanAccount(JohnDoe, new Money(1000, 12),new Money(234, 53));
+            var JohnsDepositAccount = Bank1.openDebitAccount(JohnDoe, new Money(1000, 6), new Money(123, 64));
+            var AndrewSmithsAccount = SuperBank.openAccount(AndrewSmith, new Money(2000, 1));
             
             JohnsDebitAccount.displayAccountDetails();
             JohnsLoanAccount.displayAccountDetails();
             JohnsDepositAccount.displayAccountDetails();
-            AndresSmithsAccount.displayAccountDetails();
+            AndrewSmithsAccount.displayAccountDetails();
 
-            Bank1.makeTransfer(JohnDoe, JohnsDebitAccount, "SB00000004", new Money(99));
-            Bank1.chargeInstallment(JohnDoe, JohnsLoanAccount, new Money(100));
-            Bank1.takeLoan(JohnDoe, JohnsLoanAccount, new Money(400));
+            Console.Write("\n\n");
+
+            Bank1.makeTransfer(JohnDoe, JohnsDebitAccount, "SB00000004", new Money(99, 64));
+            Bank1.chargeInstallment(JohnDoe, JohnsLoanAccount, new Money(100, 73));
+            Bank1.takeLoan(JohnDoe, JohnsLoanAccount, new Money(400, 99));
 
             var IBPA = InterBankPaymentAgency.getInterBankPaymentAgency();
             IBPA.processQueuedPayments();
             JohnsDebitAccount.displayAccountDetails();
             JohnsLoanAccount.displayAccountDetails();
             JohnsDepositAccount.displayAccountDetails();
-            AndresSmithsAccount.displayAccountDetails();
+            AndrewSmithsAccount.displayAccountDetails();
+            Console.Write("\n\n");
             JohnsDebitAccount.displayHistory();
-            AndresSmithsAccount.displayHistory();
+            AndrewSmithsAccount.displayHistory();
         }
 
         public static int AddInts(int a, int b)

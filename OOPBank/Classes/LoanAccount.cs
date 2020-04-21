@@ -6,18 +6,18 @@ namespace OOPBank
     {
         public Money loanAmount { get; set; }
 
-        public LoanAccount(Customer owner, string number, long startingBalance, long loanAmount) : base(owner, number,
+        public LoanAccount(Customer owner, string number, Money startingBalance, Money loanAmount) : base(owner, number,
             startingBalance)
         {
-            this.loanAmount = new Money(loanAmount);
+            this.loanAmount = new Money(loanAmount.dollars, loanAmount.cents);
         }
 
         public bool tooMuchTransfer(Money money)
         {
-            return (loanAmount - money).Amount < 0;
+            return loanAmount - money < 0;
         }
 
-        public void bookInstalmentOperation(Operation operation)
+        public void bookInstallmentOperation(Operation operation)
         {
             outgoingOperations.Add(operation);
             balance -= operation.money;
@@ -28,8 +28,8 @@ namespace OOPBank
         {
             Console.WriteLine("###  Loan account details  ###");
             Console.WriteLine("Number: " + accountNumber);
-            Console.WriteLine("Balance: " + balance.Amount);
-            Console.WriteLine("Loan amount: " + loanAmount.Amount);
+            Console.WriteLine("Balance: " + balance.asDouble);
+            Console.WriteLine("Loan amount: " + loanAmount.asDouble);
             Console.WriteLine("###############################");
         }
     }

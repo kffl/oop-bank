@@ -10,7 +10,7 @@ namespace OOPBank
         private bool isCalculated { get; set; }
         private TimeSpan duration { get; }
 
-        public DepositAccount(Customer owner, string number, long startingBalance, TimeSpan duration) : base(owner, number, startingBalance)
+        public DepositAccount(Customer owner, string number, Money startingBalance, TimeSpan duration) : base(owner, number, startingBalance)
         {
             this.duration = duration;
             date = DateTime.Today.Add(duration);
@@ -45,7 +45,7 @@ namespace OOPBank
             }
             Console.WriteLine("###  Deposit account details  ###");
             Console.WriteLine("Number: " + accountNumber);
-            Console.WriteLine("Balance: " + balance.Amount);
+            Console.WriteLine("Balance: " + balance.asDouble);
             Console.WriteLine("Expected end date: " + date.ToString("yyyyMMdd"));
             Console.WriteLine("###############################");
         }

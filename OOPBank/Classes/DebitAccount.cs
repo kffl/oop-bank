@@ -7,22 +7,22 @@ namespace OOPBank
     {
         protected Money debitLimit { get; set; }
 
-        public DebitAccount(Customer owner, string number, long startingBalance, long debitLimitation) : base(owner, number, startingBalance)
+        public DebitAccount(Customer owner, string number, Money startingBalance, Money debitLimitation) : base(owner, number, startingBalance)
         {
-            debitLimit = new Money(debitLimitation);
+            debitLimit = new Money(debitLimitation.dollars, debitLimitation.cents);
         }
 
         public override bool hasSufficientBalance(Money money)
         {
-            return (debitLimit + balance - money).Amount >= 0;
+            return debitLimit + balance - money >= 0;
         }
 
         public override void displayAccountDetails()
         {
             Console.WriteLine("###  Debit account details  ###");
             Console.WriteLine("Number: " + accountNumber);
-            Console.WriteLine("Balance: " + balance.Amount);
-            Console.WriteLine("Debt limitation: " + debitLimit.Amount);
+            Console.WriteLine("Balance: " + balance.asDouble);
+            Console.WriteLine("Debt limitation: " + debitLimit.asDouble);
             Console.WriteLine("###############################");
         }
     }

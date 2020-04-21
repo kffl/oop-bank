@@ -32,48 +32,48 @@ namespace OOPBank
             return accountPrefix + (++lastAccountNumber).ToString("D8");
         }
 
-        public LocalAccount openDebitAccount(Customer customer, long startingBalance = 0, long startingDebit = 0)
+        public LocalAccount openDebitAccount(Customer customer, Money? startingBalance, Money? startingDebit)
         {
             var newAccount = new DebitAccount(
                 customer,
                 generateAccountNumber(),
-                startingBalance,
-                startingDebit
+                startingBalance ?? new Money(),
+                startingDebit ?? new Money()
             );
             accounts.Add(newAccount);
             return newAccount;
         }
 
-        public LocalAccount openLoanAccount(Customer customer, long startingBalance = 0, long startingLoan = 0)
+        public LocalAccount openLoanAccount(Customer customer, Money? startingBalance, Money? startingLoan)
         {
             var newAccount = new LoanAccount(
                 customer,
                 generateAccountNumber(),
-                startingBalance,
-                startingLoan
+                startingBalance ?? new Money(),
+                startingLoan ?? new Money()
             );
             accounts.Add(newAccount);
             return newAccount;
         }
 
-        public LocalAccount openDepositAccount(Customer customer, long startingBalance = 0, int durationDays = 30)
+        public LocalAccount openDepositAccount(Customer customer, Money? startingBalance, int durationDays = 30)
         {
             var newAccount = new DepositAccount(
                 customer,
                 generateAccountNumber(),
-                startingBalance,
+                startingBalance ?? new Money(),
                 new TimeSpan(durationDays, 0, 0, 0)
             );
             accounts.Add(newAccount);
             return newAccount;
         }
 
-        public LocalAccount openAccount(Customer customer, long startingBalance = 0)
+        public LocalAccount openAccount(Customer customer, Money? startingBalance)
         {
             var newAccount = new LocalAccount(
                 customer,
                 generateAccountNumber(),
-                startingBalance
+                startingBalance ?? new Money()
             );
             accounts.Add(newAccount);
             return newAccount;
@@ -97,7 +97,7 @@ namespace OOPBank
 
             var newOperation = new InternalOperation(loanAccount, amount);
             newOperation.setOperationStatus(Operation.OperationStatus.Completed);
-            loanAccount.bookInstalmentOperation(newOperation);
+            loanAccount.bookInstallmentOperation(newOperation);
         }
 
         public void makeTransfer(Customer customer, LocalAccount fromAccount, string toAccountNumber, Money amount)
