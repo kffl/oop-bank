@@ -10,8 +10,6 @@ namespace OOPBank
         private bool isCalculated { get; set; }
         private TimeSpan duration { get; }
 
-        public DepositAccount() { }
-
         public DepositAccount(Customer owner, string number, long startingBalance, TimeSpan duration) : base(owner, number, startingBalance)
         {
             this.duration = duration;

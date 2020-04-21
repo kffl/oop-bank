@@ -6,10 +6,6 @@ namespace OOPBank
     {
         public Money loanAmount { get; set; }
 
-        public LoanAccount()
-        {
-        }
-
         public LoanAccount(Customer owner, string number, long startingBalance, long loanAmount) : base(owner, number,
             startingBalance)
         {

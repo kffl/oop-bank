@@ -26,7 +26,7 @@ namespace OOPBank
             AndresSmithsAccount.displayAccountDetails();
 
             Bank1.makeTransfer(JohnDoe, JohnsDebitAccount, "SB00000004", new Money(99));
-            Bank1.chargeInstalment(JohnDoe, JohnsLoanAccount, new Money(100));
+            Bank1.chargeInstallment(JohnDoe, JohnsLoanAccount, new Money(100));
             Bank1.takeLoan(JohnDoe, JohnsLoanAccount, new Money(400));
 
             var IBPA = InterBankPaymentAgency.getInterBankPaymentAgency();
