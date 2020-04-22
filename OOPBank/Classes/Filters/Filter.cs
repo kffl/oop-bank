@@ -1,6 +1,8 @@
-﻿namespace OOPBank.Classes.Filters
+﻿using System;
+
+namespace OOPBank.Classes.Filters
 {
-    public abstract class Filter
+    public class Filter
     {
         public int OperationsLimit { get; }
         public OperationType Type { get; }
@@ -16,6 +18,11 @@
         {
             OperationsLimit = operationsLimit;
             Type = type;
+        }
+
+        public void showDetails()
+        {
+            Console.WriteLine("Filter: showing " + OperationsLimit + " operations of type: " + Type);
         }
 
     }

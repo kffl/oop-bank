@@ -12,5 +12,10 @@ namespace OOPBank.Classes.Filters
             AmountFrom = amountFrom;
             AmountTo = amountTo;
         }
+
+        public new void showDetails()
+        {
+            Console.WriteLine("AccountFilter: showing " + OperationsLimit + " operations of type: " + Type + " with amount between " + AmountFrom.asDouble + " and " + AmountTo.asDouble);
+        }
     }
 }

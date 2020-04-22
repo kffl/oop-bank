@@ -19,5 +19,10 @@ namespace OOPBank.Classes.Filters
             Account = account;
             AccountFilterType = accountFilterType;
         }
+
+        public new void showDetails()
+        {
+            Console.WriteLine("AccountFilter: showing " + OperationsLimit + " operations of type: " + Type + " with account filter type: " + AccountFilterType + " with account number set to: " + Account.accountNumber);
+        }
     }
 }
