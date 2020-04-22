@@ -30,19 +30,19 @@ namespace OOPBank
         public override void bookIncomingOperation(Operation operation)
         {
             IncomingOperations.Add(operation);
-            balance += operation.money;
+            balance += operation.Money;
         }
 
         public override void bookOutgoingOperation(Operation operation)
         {
             OutgoingOperations.Add(operation);
-            if (balance - operation.money >= 0)
+            if (balance - operation.Money >= 0)
             {
-                balance -= operation.money;
+                balance -= operation.Money;
                 return;
             }
 
-            var remainingMoney = operation.money - balance;
+            var remainingMoney = operation.Money - balance;
             balance = new Money();
             depositAmount -= remainingMoney;
             depositsWithdraws++;

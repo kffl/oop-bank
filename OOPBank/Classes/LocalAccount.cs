@@ -15,7 +15,7 @@ namespace OOPBank
             if (startingBalance < 0) throw new Exception("Starting balance must not be lower than 0.");
             this.owner = owner;
             balance = new Money(startingBalance.dollars, startingBalance.cents);
-            interestRate = new InterestRate(this, incomingOperations, outgoingOperations);
+            interestRate = new InterestRate(this, IncomingOperations, OutgoingOperations);
         }
 
 
@@ -41,7 +41,7 @@ namespace OOPBank
 
         public void rollbackOutgoingOperation(Operation operation)
         {
-            balance = balance + operation.money;
+            balance = balance + operation.Money;
         }
 
         public Money getBalance()
