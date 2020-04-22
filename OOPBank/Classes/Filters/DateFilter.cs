@@ -12,5 +12,10 @@ namespace OOPBank.Classes.Filters
             DateFrom = dateFrom;
             DateTo = dateTo;
         }
+
+        public new void showDetails()
+        {
+            Console.WriteLine("AccountFilter: showing " + OperationsLimit + " operations of type: " + Type + " with dates between " + DateFrom + " and " + DateTo);
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace OOPBank.Classes
             if (operations.Count > filter.OperationsLimit)
                 operations = limitOperations(operations, filter.OperationsLimit);
 
-            return new Report(account, operations);
+            return new Report(account, operations, filter);
         }
 
         private static List<Operation> filterAccount(List<Operation> operations, AccountFilter accountFilter)
