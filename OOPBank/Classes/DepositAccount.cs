@@ -20,20 +20,20 @@ namespace OOPBank
 
         public override void bookIncomingOperation(Operation operation)
         {
-            incomingOperations.Add(operation);
-            balance = balance + operation.money;
+            IncomingOperations.Add(operation);
+            balance = balance + operation.Money;
             hasFirstIncoming = true;
         }
 
         public override void bookOutgoingOperation(Operation operation)
         {
-            outgoingOperations.Add(operation);
+            OutgoingOperations.Add(operation);
             if (DateTime.Today >= date && isCalculated)
             {
                 balance = balance; //Add interest rate
             }
             isCalculated = true;
-            balance = balance - operation.money;
+            balance = balance - operation.Money;
         }
 
         public override void displayAccountDetails()

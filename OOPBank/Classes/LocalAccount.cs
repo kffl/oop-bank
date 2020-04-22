@@ -3,12 +3,10 @@ using System.Collections.Generic;
 
 namespace OOPBank
 {
-	public class LocalAccount : Account
-	{
-		protected List<Operation> incomingOperations = new List<Operation>();
-		protected List<Operation> outgoingOperations = new List<Operation>();
-		protected Customer owner;
-		protected Money balance { get; set; }
+    public class LocalAccount : Account
+    {
+        protected Customer owner;
+        protected Money balance { get; set; }
 
 
 		public LocalAccount(Customer owner, string number, Money startingBalance) : base(number)
@@ -21,23 +19,22 @@ namespace OOPBank
         {
             return balance - money >= 0;
         }
+        public virtual void bookOutgoingOperation(Operation operation)
+        {
+            OutgoingOperations.Add(operation);
+            balance = balance - operation.Money;
+        }
 
-		public virtual void bookOutgoingOperation(Operation operation)
-		{
-			outgoingOperations.Add(operation);
-			balance = balance - operation.money;
-		}
+        public virtual void bookIncomingOperation(Operation operation)
+        {
+            IncomingOperations.Add(operation);
+            balance = balance + operation.Money;
+        }
 
-		public virtual void bookIncomingOperation(Operation operation)
-		{
-			incomingOperations.Add(operation);
-			balance = balance + operation.money;
-		}
-
-		public void rollbackOutgoingOperation(Operation operation)
-		{
-			balance = balance + operation.money;
-		}
+        public void rollbackOutgoingOperaion(Operation operation)
+        {
+            balance = balance + operation.Money;
+        }
 
 		public Money getBalance()
 		{
@@ -51,15 +48,14 @@ namespace OOPBank
             Console.WriteLine("Balance: " + balance.asDouble);
             Console.WriteLine("#########################");
         }
-
-		public void displayHistory()
-		{
-			Console.WriteLine("###  Account history  ###");
-			Console.WriteLine("####Incoming history ####");
-			foreach (var operation in incomingOperations) operation.displayOperationDetails();
-			Console.WriteLine("####Outgoing history ####");
-			foreach (var operation in outgoingOperations) operation.displayOperationDetails();
-			Console.WriteLine("#########################");
-		}
-	}
+        public void displayHistory()
+        {
+            Console.WriteLine("###  Account history  ###");
+            Console.WriteLine("####Incoming history ####");
+            foreach (var operation in IncomingOperations) operation.displayOperationDetails();
+            Console.WriteLine("####Outgoing history ####");
+            foreach (var operation in OutgoingOperations) operation.displayOperationDetails();
+            Console.WriteLine("#########################");
+        }
+    }
 }
