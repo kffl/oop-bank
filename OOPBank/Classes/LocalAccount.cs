@@ -1,19 +1,27 @@
 using System;
 using System.Collections.Generic;
+using OOPBank.Classes;
 
 namespace OOPBank
 {
     public class LocalAccount : Account
     {
-        protected Customer owner;
+        protected readonly InterestRate interestRate;
+        protected readonly Customer owner;
+
+
+        public LocalAccount(Customer owner, string number, Money startingBalance) : base(number)
+        {
+            if (startingBalance < 0) throw new Exception("Starting balance must not be lower than 0.");
+            this.owner = owner;
+            balance = new Money(startingBalance.dollars, startingBalance.cents);
+            interestRate = new InterestRate(this, incomingOperations, outgoingOperations);
+        }
+
+
         protected Money balance { get; set; }
+        protected double InterestRate => interestRate.Amount;
 
-
-		public LocalAccount(Customer owner, string number, Money startingBalance) : base(number)
-		{
-			this.owner = owner;
-			balance = new Money(startingBalance.dollars, startingBalance.cents);
-		}
 
         public virtual bool hasSufficientBalance(Money money)
         {
@@ -31,15 +39,19 @@ namespace OOPBank
             balance = balance + operation.Money;
         }
 
-        public void rollbackOutgoingOperaion(Operation operation)
+        public void rollbackOutgoingOperation(Operation operation)
         {
-            balance = balance + operation.Money;
+            balance = balance + operation.money;
         }
 
-		public Money getBalance()
-		{
-			return balance;
-		}
+        public Money getBalance()
+        {
+            return balance;
+        }
+
+        public virtual void handleNewDay()
+        {
+        }
 
         public virtual void displayAccountDetails()
         {

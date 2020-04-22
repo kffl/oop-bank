@@ -8,19 +8,29 @@ namespace OOPBank
         private static long lastAccountNumber;
         private readonly List<LocalAccount> accounts = new List<LocalAccount>();
         private readonly List<Customer> customers = new List<Customer>();
+        private readonly InterBankPaymentAgency IBPA;
         private readonly List<ExternalOperation> pendingExternalOperations = new List<ExternalOperation>();
         public string accountPrefix;
+
 
         public Bank(string name, string accountPrefix)
         {
             this.name = name;
             this.accountPrefix = accountPrefix;
             //the bank has to register itself to IBPA
-            var IBPA = InterBankPaymentAgency.getInterBankPaymentAgency();
+            IBPA = InterBankPaymentAgency.getInterBankPaymentAgency();
             IBPA.registerBank(this);
         }
 
+
         public string name { get; }
+
+
+        public void simulateNewDay()
+        {
+            foreach (var account in accounts) account.handleNewDay();
+            IBPA.processQueuedPayments();
+        }
 
         public void addCustomer(Customer newCustomer)
         {
@@ -32,7 +42,8 @@ namespace OOPBank
             return accountPrefix + (++lastAccountNumber).ToString("D8");
         }
 
-        public LocalAccount openDebitAccount(Customer customer, Money? startingBalance, Money? startingDebit)
+        public DebitAccount openDebitAccount(Customer customer, Money startingBalance = null,
+            Money startingDebit = null)
         {
             var newAccount = new DebitAccount(
                 customer,
@@ -44,7 +55,7 @@ namespace OOPBank
             return newAccount;
         }
 
-        public LocalAccount openLoanAccount(Customer customer, Money? startingBalance, Money? startingLoan)
+        public LoanAccount openLoanAccount(Customer customer, Money startingBalance = null, Money startingLoan = null)
         {
             var newAccount = new LoanAccount(
                 customer,
@@ -56,19 +67,21 @@ namespace OOPBank
             return newAccount;
         }
 
-        public LocalAccount openDepositAccount(Customer customer, Money? startingBalance, int durationDays = 30)
+        public DepositAccount openDepositAccount(Customer customer, Money depositAmount, Money startingBalance = null,
+            int durationDays = 30)
         {
             var newAccount = new DepositAccount(
                 customer,
                 generateAccountNumber(),
                 startingBalance ?? new Money(),
-                new TimeSpan(durationDays, 0, 0, 0)
+                depositAmount,
+                durationDays
             );
             accounts.Add(newAccount);
             return newAccount;
         }
 
-        public LocalAccount openAccount(Customer customer, Money? startingBalance)
+        public LocalAccount openAccount(Customer customer, Money startingBalance = null)
         {
             var newAccount = new LocalAccount(
                 customer,
@@ -79,73 +92,55 @@ namespace OOPBank
             return newAccount;
         }
 
-        public void takeLoan(Customer customer, LocalAccount fromAccount, Money amount)
+        public void takeLoan(Customer customer, LoanAccount fromAccount, Money amount)
         {
             if (!accounts.Contains(fromAccount)) throw new Exception("This account does not belong to our bank.");
-            if (!(fromAccount is LoanAccount loanAccount)) throw new Exception("Wrong type of account.");
-            loanAccount.loanAmount += amount;
+            if (amount <= 0) throw new Exception("Amount has to be greater than 0.");
+            fromAccount.loanAmount += amount;
         }
 
-        public void chargeInstallment(Customer customer, LocalAccount fromAccount, Money amount)
+        public void chargeInstallment(Customer customer, LoanAccount fromAccount, Money amount)
         {
             if (!accounts.Contains(fromAccount)) throw new Exception("This account does not belong to our bank.");
-            if (!(fromAccount is LoanAccount loanAccount)) throw new Exception("Wrong type of account.");
-            if (loanAccount.tooMuchTransfer(amount))
-                throw new Exception("Tried to transfer to much money.");
+            if (amount <= 0) throw new Exception("Amount has to be greater than 0.");
+            if (!fromAccount.hasSufficientBalance(amount)) throw new Exception("Insufficient account balance.");
 
-            if (!loanAccount.hasSufficientBalance(amount)) throw new Exception("Insufficient account balance.");
+            if (fromAccount.tooMuchTransfer(amount)) throw new Exception("Tried to transfer too much money.");
 
-            var newOperation = new InternalOperation(loanAccount, amount);
+            var newOperation = new InternalOperation(fromAccount, amount);
             newOperation.setOperationStatus(Operation.OperationStatus.Completed);
-            loanAccount.bookInstallmentOperation(newOperation);
+            fromAccount.bookInstallmentOperation(newOperation);
         }
 
         public void makeTransfer(Customer customer, LocalAccount fromAccount, string toAccountNumber, Money amount)
         {
             //check if account belongs to this bank
             if (!accounts.Contains(fromAccount)) throw new Exception("This account does not belong to our bank.");
+            if (amount <= 0) throw new Exception("Amount has to be greater than 0.");
+            if (fromAccount.accountNumber == toAccountNumber) throw new Exception("Transfer has to be between different accounts.");
+            if (!fromAccount.hasSufficientBalance(amount)) throw new Exception("Insufficient account balance.");
 
             if (toAccountNumber.StartsWith(accountPrefix))
             {
                 //it's an internal transfer
                 var recipientsAccount = accounts.Find(a => a.accountNumber == toAccountNumber);
-                if (recipientsAccount != null)
-                {
-                    if (recipientsAccount is DepositAccount recipientsDepositAccount
-                        && recipientsDepositAccount.hasFirstIncoming)
-                        throw new Exception("You can transfer money only one time.");
+                if (recipientsAccount == null) throw new Exception("Recipient's account not found");
 
-                    if (fromAccount.hasSufficientBalance(amount))
-                    {
-                        var newOperation = new InternalOperation(fromAccount, recipientsAccount, amount);
-                        newOperation.setOperationStatus(Operation.OperationStatus.Completed);
-                        fromAccount.bookOutgoingOperation(newOperation);
-                        recipientsAccount.bookIncomingOperation(newOperation);
-                    }
-                    else
-                    {
-                        throw new Exception("Insufficient account balance.");
-                    }
-                }
-                else
-                {
-                    throw new Exception("Recipient's account not found");
-                }
+                var newOperation = new InternalOperation(fromAccount, recipientsAccount, amount);
+                newOperation.setOperationStatus(Operation.OperationStatus.Completed);
+                fromAccount.bookOutgoingOperation(newOperation);
+                recipientsAccount.bookIncomingOperation(newOperation);
             }
             else
             {
                 //it's an external transfer
-                if (fromAccount.hasSufficientBalance(amount))
-                {
-                    var newOperation = new ExternalOperation(fromAccount, new Account(toAccountNumber), amount);
-                    newOperation.setOperationStatus(Operation.OperationStatus.PendingCompletion);
-                    fromAccount.bookOutgoingOperation(newOperation);
-                    var IBPA = InterBankPaymentAgency.getInterBankPaymentAgency();
-                    var transactionID =
-                        IBPA.performInterBankTransfer(fromAccount.accountNumber, this, toAccountNumber, amount);
-                    newOperation.IBPAID = transactionID;
-                    pendingExternalOperations.Add(newOperation);
-                }
+                var newOperation = new ExternalOperation(fromAccount, new Account(toAccountNumber), amount);
+                newOperation.setOperationStatus(Operation.OperationStatus.PendingCompletion);
+                fromAccount.bookOutgoingOperation(newOperation);
+                var transactionID =
+                    IBPA.performInterBankTransfer(fromAccount.accountNumber, this, toAccountNumber, amount);
+                newOperation.IBPAID = transactionID;
+                pendingExternalOperations.Add(newOperation);
             }
         }
 
