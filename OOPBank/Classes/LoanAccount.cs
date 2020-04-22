@@ -19,9 +19,9 @@ namespace OOPBank
 
         public void bookInstallmentOperation(Operation operation)
         {
-            outgoingOperations.Add(operation);
-            balance -= operation.money;
-            loanAmount -= operation.money;
+            OutgoingOperations.Add(operation);
+            balance -= operation.Money;
+            loanAmount -= operation.Money;
         }
 
         public override void displayAccountDetails()

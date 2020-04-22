@@ -4,10 +4,10 @@ namespace OOPBank
 {
     public class Operation
     {
-        protected DateTime dateOfExecution;
-        protected Account fromAccount;
-        protected Account toAccount;
-        public Money money;
+        public DateTime DateOfExecution { get; }
+        public Account FromAccount;
+        public Account ToAccount;
+        public Money Money;
         protected long ID;
         private static long lastId = 0;
 
@@ -26,21 +26,21 @@ namespace OOPBank
 
         public Operation(Account fromAccount, Account toAccount, Money money)
         {
-            this.money = money;
-            this.fromAccount = fromAccount;
-            this.toAccount = toAccount;
+            this.Money = money;
+            this.FromAccount = fromAccount;
+            this.ToAccount = toAccount;
             ID = ++lastId;
-            dateOfExecution = new DateTime();
+            DateOfExecution = new DateTime();
             status = OperationStatus.Disposed;
         }
 
         public Operation(Account fromAccount, Money money)
         {
-            this.money = money;
-            this.fromAccount = fromAccount;
-            toAccount = null;
+            this.Money = money;
+            this.FromAccount = fromAccount;
+            ToAccount = null;
             ID = ++lastId;
-            dateOfExecution = new DateTime();
+            DateOfExecution = new DateTime();
             status = OperationStatus.Disposed;
         }
 
@@ -48,10 +48,10 @@ namespace OOPBank
         {
             Console.WriteLine("### Operation details ###");
             Console.WriteLine("ID: " + ID);
-            Console.WriteLine("From account: {0}", fromAccount.accountNumber);
-            if (toAccount != null)
-                Console.WriteLine("To account: {0}", toAccount.accountNumber);
-            Console.WriteLine("Amount: {0}", money.asDouble);
+            Console.WriteLine("From account: {0}", FromAccount.accountNumber);
+            if (ToAccount != null)
+                Console.WriteLine("To account: {0}", ToAccount.accountNumber);
+            Console.WriteLine("Amount: {0}", Money.asDouble);
             Console.WriteLine("#########################");
         }
 
