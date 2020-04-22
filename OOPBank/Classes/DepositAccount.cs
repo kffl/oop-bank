@@ -1,52 +1,75 @@
 using System;
-using System.Collections.Generic;
 
 namespace OOPBank
 {
     public class DepositAccount : LocalAccount
     {
-        public DateTime date { get; set; }
-        public bool hasFirstIncoming { get; set; }
-        private bool isCalculated { get; set; }
-        private TimeSpan duration { get; }
+        private readonly int daysToClose;
+        private int daysPassed;
+        private Money depositAmount;
+        private int depositsWithdraws;
+        private Money earnedMoney = new Money();
 
-        public DepositAccount(Customer owner, string number, Money startingBalance, TimeSpan duration) : base(owner, number, startingBalance)
+
+        public DepositAccount(Customer owner, string number, Money startingBalance, Money depositAmount, int duration) :
+            base(owner, number, startingBalance)
         {
-            this.duration = duration;
-            date = DateTime.Today.Add(duration);
-            isCalculated = false;
-            hasFirstIncoming = false;
+            if (duration <= 0) throw new Exception("Deposit duration has to be longer than 0 days.");
+            daysToClose = duration;
+            this.depositAmount = new Money(depositAmount.dollars, depositAmount.cents);
+        }
+
+        private bool isClosed => daysPassed >= daysToClose;
+
+
+        public override bool hasSufficientBalance(Money money)
+        {
+            return depositAmount + balance - money >= 0;
         }
 
         public override void bookIncomingOperation(Operation operation)
         {
             IncomingOperations.Add(operation);
-            balance = balance + operation.Money;
-            hasFirstIncoming = true;
+            balance += operation.money;
         }
 
         public override void bookOutgoingOperation(Operation operation)
         {
             OutgoingOperations.Add(operation);
-            if (DateTime.Today >= date && isCalculated)
+            if (balance - operation.money >= 0)
             {
-                balance = balance; //Add interest rate
+                balance -= operation.money;
+                return;
             }
-            isCalculated = true;
-            balance = balance - operation.Money;
+
+            var remainingMoney = operation.money - balance;
+            balance = new Money();
+            depositAmount -= remainingMoney;
+            depositsWithdraws++;
+        }
+
+        public override void handleNewDay()
+        {
+            if (daysToClose == daysPassed)
+            {
+                earnedMoney = depositAmount *
+                              ((InterestRate + interestRate.depositInterestConstant) /
+                               (depositsWithdraws == 0 ? 1 : depositsWithdraws));
+                balance += depositAmount + earnedMoney;
+                depositAmount = new Money();
+            }
+
+            if (!isClosed) daysPassed++;
         }
 
         public override void displayAccountDetails()
         {
-            if (DateTime.Today >= date && isCalculated)
-            {
-                balance = balance; //Add interest rate
-                isCalculated = true;
-            }
             Console.WriteLine("###  Deposit account details  ###");
             Console.WriteLine("Number: " + accountNumber);
             Console.WriteLine("Balance: " + balance.asDouble);
-            Console.WriteLine("Expected end date: " + date.ToString("yyyyMMdd"));
+            Console.WriteLine("Deposit amount: " + depositAmount.asDouble);
+            Console.WriteLine("Earned money: " + earnedMoney.asDouble);
+            Console.WriteLine("Days to close: " + (daysToClose - daysPassed));
             Console.WriteLine("###############################");
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace OOPBank
 {
@@ -19,7 +20,8 @@ namespace OOPBank
         {
             var decimalPart = (long)Math.Floor(amount);
             dollars = decimalPart;
-            cents = (long) (amount - decimalPart);
+            var fractionPart = amount - decimalPart;
+            cents = (long) Math.Round(fractionPart, 2);
         }
 
 
@@ -50,6 +52,11 @@ namespace OOPBank
             }
 
             return new Money(dollarsResult, centsResult);
+        }
+
+        public static Money operator *(Money a, double b)
+        {
+            return new Money(a.asDouble * b);
         }
 
         public static bool operator <(Money a, Money b)
