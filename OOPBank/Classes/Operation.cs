@@ -4,10 +4,10 @@ namespace OOPBank
 {
     public class Operation
     {
-        public DateTime DateOfExecution { get; }
-        public Account FromAccount;
-        public Account ToAccount;
-        public Money Money;
+        public virtual DateTime DateOfExecution { get; }
+        public virtual Account FromAccount { get; }
+        public virtual Account ToAccount { get; }
+        public virtual Money Money { get; }
         protected long ID;
         private static long lastId = 0;
 
@@ -23,6 +23,10 @@ namespace OOPBank
         }
 
         protected OperationStatus status;
+
+        public Operation()
+        {
+        }
 
         public Operation(Account fromAccount, Account toAccount, Money money)
         {

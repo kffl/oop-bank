@@ -5,9 +5,9 @@ namespace OOPBank
 {
     public class Account
     {
-        public string accountNumber { get; }
-        public List<Operation> IncomingOperations { get; } = new List<Operation>();
-        public List<Operation> OutgoingOperations { get; } = new List<Operation>();
+        public virtual string accountNumber { get; }
+        public virtual List<Operation> IncomingOperations { get; } = new List<Operation>();
+        public virtual List<Operation> OutgoingOperations { get; } = new List<Operation>();
 
         public Account()
         {
