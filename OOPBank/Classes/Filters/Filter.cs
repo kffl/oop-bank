@@ -4,8 +4,8 @@ namespace OOPBank.Classes.Filters
 {
     public class Filter
     {
-        public int OperationsLimit { get; }
-        public OperationType Type { get; }
+        public virtual int OperationsLimit { get; }
+        public virtual OperationType Type { get; }
 
         public enum OperationType
         {
@@ -14,13 +14,17 @@ namespace OOPBank.Classes.Filters
             All
         }
 
+        public Filter()
+        {
+        }
+
         protected Filter(int operationsLimit, OperationType type)
         {
             OperationsLimit = operationsLimit;
             Type = type;
         }
 
-        public void showDetails()
+        public virtual void showDetails()
         {
             Console.WriteLine("Filter: showing " + OperationsLimit + " operations of type: " + Type);
         }

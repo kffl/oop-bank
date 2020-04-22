@@ -25,21 +25,23 @@ namespace OOPBank.Classes
                     break;
             }
 
+            operations = operations.OrderByDescending(o => o.DateOfExecution).ToList(); //latest first
+
             if (operations.Count > filter.OperationsLimit)
-                operations = limitOperations(operations, filter.OperationsLimit);
+                operations = operations.Take(filter.OperationsLimit).ToList();  //limit number of operations
 
             return new Report(account, operations, filter);
         }
 
         private static List<Operation> filterAccount(List<Operation> operations, AccountFilter accountFilter)
         {
-            switch (accountFilter.AccountFilterType)
+            switch (accountFilter.Type)
             {
-                case AccountFilter.AccountType.incoming:
-                    return operations.Where(operation => operation.ToAccount == accountFilter.Account).ToList();
-                case AccountFilter.AccountType.outgoing:
+                case Filter.OperationType.Incoming:
                     return operations.Where(operation => operation.FromAccount == accountFilter.Account).ToList();
-                case AccountFilter.AccountType.both:
+                case Filter.OperationType.Outgoing:
+                    return operations.Where(operation => operation.ToAccount == accountFilter.Account).ToList();
+                case Filter.OperationType.All:
                     return operations;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -81,11 +83,6 @@ namespace OOPBank.Classes
             }
 
             return operations;
-        }
-
-        private static List<Operation> limitOperations(List<Operation> operations, int limit)
-        {
-            return (List<Operation>) operations.OrderBy(o => o.DateOfExecution).Take(limit);
         }
     }
 }
