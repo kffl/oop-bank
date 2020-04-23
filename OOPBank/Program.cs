@@ -49,10 +49,5 @@ namespace OOPBank
             Console.Write("\n");
             AndrewSmithsAccount.displayHistory();
         }
-
-        public static int AddInts(int a, int b)
-        {
-            return a + b;
-        }
     }
 }
