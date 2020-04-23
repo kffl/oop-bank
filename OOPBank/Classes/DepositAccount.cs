@@ -15,6 +15,7 @@ namespace OOPBank
             base(owner, number, startingBalance)
         {
             if (duration <= 0) throw new Exception("Deposit duration has to be longer than 0 days.");
+            if (depositAmount <= 0) throw new Exception("Deposit amount has to be greater than 0.");
             daysToClose = duration;
             this.depositAmount = new Money(depositAmount.dollars, depositAmount.cents);
         }
