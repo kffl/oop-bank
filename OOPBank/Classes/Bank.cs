@@ -3,15 +3,14 @@ using System.Collections.Generic;
 
 namespace OOPBank
 {
-    public class Bank
+    public class Bank : IBank
     {
         private static long lastAccountNumber;
         private readonly List<LocalAccount> accounts = new List<LocalAccount>();
         private readonly List<Customer> customers = new List<Customer>();
         private readonly InterBankPaymentAgency IBPA;
         private readonly List<ExternalOperation> pendingExternalOperations = new List<ExternalOperation>();
-        public string accountPrefix;
-
+        public string accountPrefix { get; }
 
         public Bank(string name, string accountPrefix)
         {
