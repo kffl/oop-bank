@@ -11,47 +11,35 @@ namespace OOPBank
 
         public Money(long dollars = 0, long cents = 0)
         {
-            if (cents < 0 || cents > 99) throw new Exception("Cents value must be greater than 0 and lower than 99");
+            if (dollars == 0 && (cents < -99 || cents > 99))
+                throw new Exception(
+                    "Cents value must be greater than -99 and lower than 99, when dollars are equal to 0.");
+            if (dollars != 0 && (cents < 0 || cents > 99)) throw new Exception("Cents value must be greater than 0 and lower than 99, when dollars are not equal to 0.");
             this.dollars = dollars;
             this.cents = cents;
         }
 
         public Money(double amount)
         {
-            var decimalPart = (long)Math.Floor(amount);
+            var decimalPart = (long) (amount < 0 ? Math.Ceiling(amount) : Math.Floor(amount));
             dollars = decimalPart;
             var fractionPart = amount - decimalPart;
-            cents = (long) Math.Round(fractionPart, 2);
+            cents = (long) (Math.Round(fractionPart, 2, amount < 0 ? MidpointRounding.AwayFromZero : MidpointRounding.ToZero) * 100);
         }
 
 
-        public double asDouble => dollars + cents * 0.01;
+        public double asDouble => dollars + Math.Abs(cents) * (isNegative ? -0.01 : 0.01);
+        public bool isNegative => dollars < 0 || cents < 0;
 
 
         public static Money operator +(Money a, Money b)
         {
-            var dollarsSum = a.dollars + b.dollars;
-            var centsSum = a.cents + b.cents;
-            if (centsSum > 99)
-            {
-                centsSum -= 100;
-                dollarsSum++;
-            }
-
-            return new Money(dollarsSum, centsSum);
+            return new Money(a.asDouble + b.asDouble);
         }
 
         public static Money operator -(Money a, Money b)
         {
-            var dollarsResult = a.dollars - b.dollars;
-            var centsResult = a.cents - b.cents;
-            if (centsResult < 0)
-            {
-                dollarsResult--;
-                centsResult += 100;
-            }
-
-            return new Money(dollarsResult, centsResult);
+            return new Money(a.asDouble - b.asDouble);
         }
 
         public static Money operator *(Money a, double b)
