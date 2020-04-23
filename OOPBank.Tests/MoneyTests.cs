@@ -96,8 +96,8 @@ namespace OOPBank.Tests
 
         [TestCase(0.32, 0.67, ExpectedResult = 0.21)]
         [TestCase(542.99, 0.5, ExpectedResult = 271.49)]
-        [TestCase(-121.68, 2.54, ExpectedResult = -308.53)]
-        [TestCase(121.68, -2.54, ExpectedResult = -308.53)]
+        [TestCase(-121.68, 2.54, ExpectedResult = -309.07)]
+        [TestCase(121.68, -2.54, ExpectedResult = -309.07)]
         [TestCase(121.68, 0, ExpectedResult = 0)]
         public double Multiplication(double money, double factor)
         {

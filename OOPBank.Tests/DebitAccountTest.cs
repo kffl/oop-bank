@@ -13,11 +13,10 @@ namespace OOPBank.Tests
             SomeCustomer = new Customer("", "");
         }
 
-        [TestCase(0, -1)]
+        [TestCase(0, -100)]
         public void ConstructorExceptionTest(long dollars, long cents)
         {
-            Assert.Throws(Is.TypeOf<Exception>()
-                .And.Message.EqualTo("Cents value must be greater than 0 and lower than 99"), () =>
+            Assert.Throws(Is.TypeOf<Exception>(), () =>
                 new DebitAccount(SomeCustomer, "A01", new Money(),
                     new Money(dollars, cents)));
         }
