@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace OOPBank
+namespace OOPBank.Classes
 {
     public class Account
     {
@@ -9,8 +9,10 @@ namespace OOPBank
             accountNumber = number;
         }
 
-        public string accountNumber { get; }
-        public List<Operation> IncomingOperations { get; } = new List<Operation>();
-        public List<Operation> OutgoingOperations { get; } = new List<Operation>();
+        public Account() { }
+
+        public virtual string accountNumber { get; }
+        public virtual List<Operation> IncomingOperations { get; } = new List<Operation>();
+        public virtual List<Operation> OutgoingOperations { get; } = new List<Operation>();
     }
 }

@@ -1,4 +1,4 @@
-namespace OOPBank
+namespace OOPBank.Classes
 {
     public class Customer
     {

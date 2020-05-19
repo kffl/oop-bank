@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
 
-namespace OOPBank
+namespace OOPBank.Classes
 {
     public class DebitAccount : LocalAccount
     {

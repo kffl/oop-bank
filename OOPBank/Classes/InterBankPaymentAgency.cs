@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
-namespace OOPBank
+namespace OOPBank.Classes
 {
     public class InterBankPaymentAgency
     {

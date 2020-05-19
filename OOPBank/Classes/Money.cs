@@ -1,7 +1,6 @@
 using System;
-using Microsoft.VisualBasic.CompilerServices;
 
-namespace OOPBank
+namespace OOPBank.Classes
 {
     public class Money
     {

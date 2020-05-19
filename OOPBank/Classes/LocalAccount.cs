@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using OOPBank.Classes;
 using OOPBank.InterestRate;
 
-namespace OOPBank
+namespace OOPBank.Classes
 {
     public class LocalAccount : Account
     {
