@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using OOPBank.Classes;
+using OOPBank.InterestRate;
 
 namespace OOPBank
 {
     public class LocalAccount : Account
     {
-        protected readonly InterestRate interestRate;
+        protected InterestRate.InterestRate interestRate;
         protected readonly Customer owner;
 
 
@@ -15,12 +16,11 @@ namespace OOPBank
             if (startingBalance < 0) throw new Exception("Starting balance must not be lower than 0.");
             this.owner = owner;
             balance = new Money(startingBalance.dollars, startingBalance.cents);
-            interestRate = new InterestRate(this, IncomingOperations, OutgoingOperations);
+            interestRate = new InterestRatePoor(this, IncomingOperations, OutgoingOperations);
         }
 
-
         protected Money balance { get; set; }
-        protected double InterestRate => interestRate.Amount;
+        public double InterestRate => interestRate.calculateInterest(state => { interestRate = state; });
 
 
         public virtual bool hasSufficientBalance(Money money)

@@ -20,8 +20,8 @@ namespace OOPBank
             Bank1.addCustomer(JohnDoe);
             SuperBank.addCustomer(AndrewSmith);
 
-            var JohnsDebitAccount = Bank1.openDebitAccount(JohnDoe, new Money(1000, 99), new Money(111, 43));
-            var JohnsLoanAccount = Bank1.openLoanAccount(JohnDoe, new Money(1000, 12), new Money(234, 53));
+            var JohnsDebitAccount = Bank1.openDebitAccount(JohnDoe, new Money(5000, 99), new Money(111, 43));
+            var JohnsLoanAccount = Bank1.openLoanAccount(JohnDoe, new Money(99000, 12), new Money(234, 53));
             var JohnsDepositAccount = Bank1.openDepositAccount(JohnDoe, new Money(1000, 6), new Money(1230, 64), 1);
             var AndrewSmithsAccount = SuperBank.openAccount(AndrewSmith, new Money(2000, 1));
             var accounts = new List<LocalAccount>
@@ -37,7 +37,7 @@ namespace OOPBank
             displayAccountsDetails(accounts);
 
             Bank1.makeTransfer(JohnDoe, JohnsDebitAccount, "SB00000004", new Money(1050, 64));
-            Bank1.makeTransfer(JohnDoe, JohnsDepositAccount, "SB00000004", new Money(1300));
+            Bank1.makeTransfer(JohnDoe, JohnsDebitAccount, JohnsLoanAccount.accountNumber, new Money(1300));
             Bank1.chargeInstallment(JohnDoe, JohnsLoanAccount, new Money(100, 73));
             Bank1.takeLoan(JohnDoe, JohnsLoanAccount, new Money(400, 99));
 
