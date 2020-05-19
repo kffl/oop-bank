@@ -1,6 +1,6 @@
 using System;
 
-namespace OOPBank
+namespace OOPBank.Classes
 {
     public class Operation
     {

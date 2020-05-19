@@ -1,4 +1,4 @@
-namespace OOPBank
+namespace OOPBank.Classes
 {
     //all the stuff that IBPA needs to interact with a bank
     public interface IBank
