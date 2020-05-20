@@ -1,6 +1,7 @@
 using System;
 using Moq;
 using OOPBank.Classes;
+using OOPBank.Classes.IBPA;
 using NUnit.Framework;
 
 namespace OOPBank.Tests
@@ -9,16 +10,16 @@ namespace OOPBank.Tests
     public class InterBankPaymentAgencyTest
     {
         private InterBankPaymentAgency IBPA;
-        private Mock<IBank> Bank1;
-        private Mock<IBank> Bank2;
+        private Mock<IBankColleague> Bank1;
+        private Mock<IBankColleague> Bank2;
 
         [SetUp]
         public void SetUp()
         {
-            Bank1 = new Mock<IBank>();
+            Bank1 = new Mock<IBankColleague>();
             Bank1.SetupGet(t => t.accountPrefix).Returns("B1");
             Bank1.Setup(t => t.handleConfirmation(1));
-            Bank2 = new Mock<IBank>();
+            Bank2 = new Mock<IBankColleague>();
             Bank2.SetupGet(t => t.accountPrefix).Returns("B2");
             Bank2.Setup(t => t.handleIncomingPayment("B10000000001", "B20000000001", It.IsAny<Money>())).Returns(true);
             Bank2.Setup(t => t.handleIncomingPayment("B10000000001", "B20000000002", It.IsAny<Money>())).Returns(false);

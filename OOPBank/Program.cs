@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OOPBank.Classes;
+using OOPBank.Classes.IBPA;
 
 namespace OOPBank
 {
@@ -18,6 +19,7 @@ namespace OOPBank
             var SuperBank = new Bank("SuperBank", "SB");
             var JohnDoe = new Customer("John", "Doe");
             var AndrewSmith = new Customer("Andrew", "Smith");
+            var IBPA = InterBankPaymentAgency.getInterBankPaymentAgency();
             Bank1.addCustomer(JohnDoe);
             SuperBank.addCustomer(AndrewSmith);
 
@@ -35,6 +37,7 @@ namespace OOPBank
 
             displayAccountsDetails(accounts);
             Bank1.simulateNewDay();
+            IBPA.processQueuedPayments();
             displayAccountsDetails(accounts);
 
             Bank1.makeTransfer(JohnDoe, JohnsDebitAccount, "SB00000004", new Money(1050, 64));
@@ -43,6 +46,7 @@ namespace OOPBank
             Bank1.takeLoan(JohnDoe, JohnsLoanAccount, new Money(400, 99));
 
             displayAccountsDetails(accounts);
+            IBPA.processQueuedPayments();
             Bank1.simulateNewDay();
             displayAccountsDetails(accounts);
 
