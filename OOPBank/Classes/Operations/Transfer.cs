@@ -7,7 +7,6 @@ namespace OOPBank.Classes.Operations
         private readonly Bank bank;
 
         private readonly Customer customer;
-        //private readonly LocalAccount FromAccount;
 
         internal readonly string toAccountNumber;
 
@@ -16,9 +15,9 @@ namespace OOPBank.Classes.Operations
             this.bank = bank;
             this.customer = customer;
             FromAccount = fromAccount;
-            //this.fromAccount.OutgoingOperations.Add(this);
             this.toAccountNumber = toAccountNumber;
             Money = amount;
+            FromAccount.OutgoingOperations.Add(this);
         }
 
         public long Ibpaid { get; set; }
@@ -39,10 +38,7 @@ namespace OOPBank.Classes.Operations
                 var recipientsAccount = bank.getAccounts().Find(a => a.AccountNumber == toAccountNumber);
                 if (recipientsAccount == null) throw new Exception("Recipient's account not found");
 
-                //var newOperation = new InternalOperation(fromAccount, recipientsAccount, amount);
-                //newOperation.setOperationStatus(Operation.OperationStatus.Completed);
                 FromAccount.decreaseBalance(Money);
-                FromAccount.OutgoingOperations.Add(this);
                 recipientsAccount.increaseBalance(Money);
                 recipientsAccount.IncomingOperations.Add(this);
                 status = OperationStatus.Completed;
@@ -50,12 +46,10 @@ namespace OOPBank.Classes.Operations
             else
             {
                 //it's an external transfer
-                //var newOperation = new ExternalOperation(fromAccount, new Account(toAccountNumber), amount);
                 status = OperationStatus.PendingCompletion;
                 FromAccount.decreaseBalance(Money);
                 FromAccount.OutgoingOperations.Add(this);
                 bank.IBPA.performInterBankTransfer(this);
-                //bank.pendingExternalOperations.Add(this);
             }
         }
     }
