@@ -19,7 +19,7 @@ namespace OOPBank.InterestRate
                          0.01;
             if (amount < 0.005) amount = 0.005;
             else if (amount > 0.2) amount = 0.2;
-            if (account.getBalance() >= 100000)
+            if (account.balance >= 100000)
                 setInterestRateState(new InterestRateRich(account, incomingOperations, outgoingOperations));
             return amount;
         }

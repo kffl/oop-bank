@@ -54,12 +54,12 @@ namespace OOPBank.Tests
         public void DepositOperationsTest()
         {
             DepositAccount1.bookIncomingOperation(mockOp.Object);
-            Assert.AreEqual(200, DepositAccount1.getBalance().asDouble);
+            Assert.AreEqual(200, DepositAccount1.balance.asDouble);
             DepositAccount1.bookOutgoingOperation(mockOp.Object);
             DepositAccount1.bookOutgoingOperation(mockOp.Object);
-            Assert.AreEqual(0, DepositAccount1.getBalance().asDouble);
+            Assert.AreEqual(0, DepositAccount1.balance.asDouble);
             DepositAccount1.bookOutgoingOperation(mockOp.Object);
-            Assert.AreEqual(0, DepositAccount1.getBalance().asDouble);
+            Assert.AreEqual(0, DepositAccount1.balance.asDouble);
         }
 
         [Test]

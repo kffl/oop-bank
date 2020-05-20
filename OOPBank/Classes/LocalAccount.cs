@@ -3,7 +3,7 @@ using OOPBank.InterestRate;
 
 namespace OOPBank.Classes
 {
-    public class LocalAccount : Account
+    public class LocalAccount : Account, ILocalAccount
     {
         protected InterestRate.InterestRate interestRate;
         protected readonly Customer owner;
@@ -17,7 +17,7 @@ namespace OOPBank.Classes
             interestRate = new InterestRatePoor(this, IncomingOperations, OutgoingOperations);
         }
 
-        protected Money balance { get; set; }
+        public Money balance { get; set; }
         public double InterestRate => interestRate.calculateInterest(state => { interestRate = state; });
 
 
@@ -25,6 +25,7 @@ namespace OOPBank.Classes
         {
             return balance - money >= 0;
         }
+
         public virtual void bookOutgoingOperation(Operation operation)
         {
             OutgoingOperations.Add(operation);
@@ -42,13 +43,15 @@ namespace OOPBank.Classes
             balance = balance + operation.Money;
         }
 
-        public Money getBalance()
-        {
-            return balance;
-        }
 
         public virtual void handleNewDay()
         {
+        }
+
+        public void withdrawMoney(Money amount)
+        {
+            if (!hasSufficientBalance(amount)) throw new Exception("Insufficient account balance.");
+            balance -= amount;
         }
 
         public virtual void displayAccountDetails()

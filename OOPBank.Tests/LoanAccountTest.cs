@@ -48,7 +48,7 @@ namespace OOPBank.Tests
         public void LoanOperationsTest()
         {
             LoanAccount1.bookInstallmentOperation(mockOp.Object);
-            Assert.AreEqual(0, LoanAccount1.getBalance().asDouble);
+            Assert.AreEqual(0, LoanAccount1.balance.asDouble);
             Assert.AreEqual(0, LoanAccount1.loanAmount.asDouble);
         }
 
