@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using OOPBank.Classes.IBPA;
 
 namespace OOPBank.Classes
 {
-    public class Bank : IBank
+    public class Bank : IBankColleague
     {
         private static long lastAccountNumber;
         private readonly List<LocalAccount> accounts = new List<LocalAccount>();
         private readonly List<Customer> customers = new List<Customer>();
-        private readonly InterBankPaymentAgency IBPA;
+        private readonly IBankMediator IBPA;
         private readonly List<ExternalOperation> pendingExternalOperations = new List<ExternalOperation>();
         public string accountPrefix { get; }
 
@@ -28,7 +29,6 @@ namespace OOPBank.Classes
         public void simulateNewDay()
         {
             foreach (var account in accounts) account.handleNewDay();
-            IBPA.processQueuedPayments();
         }
 
         public void addCustomer(Customer newCustomer)

@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 
-namespace OOPBank.Classes
+namespace OOPBank.Classes.IBPA
 {
-    public class InterBankPaymentAgency
+    public class InterBankPaymentAgency : IBankMediator
     {
         private class InterBankPayment
         {
             private static long IBPCounter = 0;
             public long ID { get; }
             private string fromAccountNumber;
-            private IBank fromBank;
+            private IBankColleague fromBank;
             private string toAccountNumber;
-            private IBank toBank;
+            private IBankColleague toBank;
             private Money amount;
             public enum PaymentStatus
             {
@@ -20,7 +20,7 @@ namespace OOPBank.Classes
                 Failed
             }
             public PaymentStatus status { get; set; }
-            public InterBankPayment(string fromAccountNumber, IBank fromBank, string toAccountNumber, IBank toBank, Money amount)
+            public InterBankPayment(string fromAccountNumber, IBankColleague fromBank, string toAccountNumber, IBankColleague toBank, Money amount)
             {
                 this.fromAccountNumber = fromAccountNumber;
                 this.fromBank = fromBank;
@@ -44,11 +44,10 @@ namespace OOPBank.Classes
             }
         }
 
-
         private List<InterBankPayment> completedPayments = new List<InterBankPayment>();
         private Queue<InterBankPayment> queuedPayments = new Queue<InterBankPayment>();
         private static InterBankPaymentAgency Agency;
-        private List<IBank> banks = new List<IBank>();
+        private List<IBankColleague> banks = new List<IBankColleague>();
 
         //Singleton
         private InterBankPaymentAgency()
@@ -65,12 +64,12 @@ namespace OOPBank.Classes
             return Agency;
         }
 
-        public void registerBank(IBank bank)
+        public void registerBank(IBankColleague bank)
         {
             banks.Add(bank);
         }
 
-        public long performInterBankTransfer(string fromAccountNumber, IBank fromBank, string toAccountNumber, Money amount)
+        public long performInterBankTransfer(string fromAccountNumber, IBankColleague fromBank, string toAccountNumber, Money amount)
         {
             var toBank = banks.Find(b => toAccountNumber.StartsWith(b.accountPrefix));
             if (toBank == null)
