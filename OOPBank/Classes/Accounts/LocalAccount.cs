@@ -6,7 +6,7 @@ namespace OOPBank.Classes
     public class LocalAccount : Account, ILocalAccount
     {
         protected InterestRate.InterestRate interestRate;
-        protected readonly Customer owner;
+        public readonly Customer owner;
 
 
         public LocalAccount(Customer owner, string number, Money startingBalance) : base(number)
@@ -25,17 +25,14 @@ namespace OOPBank.Classes
         {
             return balance - money >= 0;
         }
-
-        public virtual void bookOutgoingOperation(Operation operation)
+        public virtual void decreaseBalance(Money money)
         {
-            OutgoingOperations.Add(operation);
-            balance = balance - operation.Money;
+            balance = balance - money;
         }
 
-        public virtual void bookIncomingOperation(Operation operation)
+        public virtual void increaseBalance(Money money)
         {
-            IncomingOperations.Add(operation);
-            balance = balance + operation.Money;
+            balance = balance + money;
         }
 
         public void rollbackOutgoingOperation(Operation operation)
@@ -57,17 +54,19 @@ namespace OOPBank.Classes
         public virtual void displayAccountDetails()
         {
             Console.WriteLine("###  Account details  ###");
-            Console.WriteLine("Number: " + accountNumber);
+            Console.WriteLine("Number: " + AccountNumber);
             Console.WriteLine("Balance: " + balance.asDouble);
             Console.WriteLine("#########################");
         }
         public void displayHistory()
         {
             Console.WriteLine("###  Account history  ###");
-            Console.WriteLine("####Incoming history ####");
+            Console.WriteLine("####Incoming history ####" + IncomingOperations.Count);
             foreach (var operation in IncomingOperations) operation.displayOperationDetails();
-            Console.WriteLine("####Outgoing history ####");
+            Console.WriteLine("####Outgoing history ####" + OutgoingOperations.Count);
             foreach (var operation in OutgoingOperations) operation.displayOperationDetails();
+            Console.WriteLine("####Other history ####" + OutgoingOperations.Count);
+            foreach (var operation in OtherOperations) operation.displayOperationDetails();
             Console.WriteLine("#########################");
         }
     }

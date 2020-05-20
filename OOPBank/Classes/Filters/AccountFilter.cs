@@ -4,8 +4,6 @@ namespace OOPBank.Classes.Filters
 {
     public class AccountFilter : Filter
     {
-        public virtual Account Account { get; }
-
         public AccountFilter()
         {
         }
@@ -15,9 +13,13 @@ namespace OOPBank.Classes.Filters
             Account = account;
         }
 
+        public virtual Account Account { get; }
+
         public new void showDetails()
         {
-            Console.WriteLine("AccountFilter: showing " + OperationsLimit + " operations of type: " + Type + " with account number set to: " + Account.accountNumber);
+            Console.WriteLine(
+                "AccountFilter: showing " + OperationsLimit + " operations of type: " + Type +
+                " with account number set to: " + Account.AccountNumber);
         }
     }
 }

@@ -6,9 +6,11 @@ namespace OOPBank.Classes
 {
     public class Report
     {
-        public readonly List<Operation> Operations;
-        public readonly Filter Filter;
         public readonly Account Account;
+
+        public readonly Filter Filter;
+
+        public readonly List<Operation> Operations;
 
         public Report(Account account, List<Operation> operations, Filter filter)
         {
@@ -19,7 +21,7 @@ namespace OOPBank.Classes
 
         public void displayReport()
         {
-            Console.WriteLine("### Report for Account number: " + Account.accountNumber + " ###");
+            Console.WriteLine("### Report for Account number: " + Account.AccountNumber + " ###");
             Console.WriteLine("Used filter:");
             Filter.showDetails();
             Console.WriteLine("Operations:");

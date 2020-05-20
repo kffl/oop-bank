@@ -5,9 +5,13 @@ namespace OOPBank.Classes
     public class DepositAccount : LocalAccount
     {
         private readonly int daysToClose;
+
         private int daysPassed;
+
         private Money depositAmount;
+
         private int depositsWithdraws;
+
         private Money earnedMoney = new Money();
 
 
@@ -20,7 +24,7 @@ namespace OOPBank.Classes
             this.depositAmount = new Money(depositAmount.dollars, depositAmount.cents);
         }
 
-        private bool isClosed => daysPassed >= daysToClose;
+        private bool IsClosed => daysPassed >= daysToClose;
 
 
         public override bool hasSufficientBalance(Money money)
@@ -28,22 +32,15 @@ namespace OOPBank.Classes
             return depositAmount + balance - money >= 0;
         }
 
-        public override void bookIncomingOperation(Operation operation)
+        public override void decreaseBalance(Money money)
         {
-            IncomingOperations.Add(operation);
-            balance += operation.Money;
-        }
-
-        public override void bookOutgoingOperation(Operation operation)
-        {
-            OutgoingOperations.Add(operation);
-            if (balance - operation.Money >= 0)
+            if (balance - money >= 0)
             {
-                balance -= operation.Money;
+                balance -= money;
                 return;
             }
 
-            var remainingMoney = operation.Money - balance;
+            var remainingMoney = money - balance;
             balance = new Money();
             depositAmount -= remainingMoney;
             depositsWithdraws++;
@@ -60,13 +57,13 @@ namespace OOPBank.Classes
                 depositAmount = new Money();
             }
 
-            if (!isClosed) daysPassed++;
+            if (!IsClosed) daysPassed++;
         }
 
         public override void displayAccountDetails()
         {
             Console.WriteLine("###  Deposit account details  ###");
-            Console.WriteLine("Number: " + accountNumber);
+            Console.WriteLine("Number: " + AccountNumber);
             Console.WriteLine("Balance: " + balance.asDouble);
             Console.WriteLine("Deposit amount: " + depositAmount.asDouble);
             Console.WriteLine("Earned money: " + earnedMoney.asDouble);
