@@ -155,7 +155,7 @@ namespace OOPBank.Classes
             return true;
         }
 
-        //handle comfirmation from IBPA regarding one of recently sent payments having been recieved
+        //handle comfirmation from IBPA regarding one of recently sent payments having been received
         public void handleConfirmation(long transactionID)
         {
             var operation = pendingExternalOperations.Find(o => o.IBPAID == transactionID);

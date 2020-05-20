@@ -21,5 +21,14 @@ namespace OOPBank.Classes.Filters
         {
             Console.WriteLine("AccountFilter: showing " + OperationsLimit + " operations of type: " + Type + " with amount between " + AmountFrom.asDouble + " and " + AmountTo.asDouble);
         }
+
+        public new Operation VisitOperation(Operation operation)
+        {
+            if (operation.Money >= AmountFrom && operation.Money <= AmountTo)
+            {
+                return operation;
+            }
+            return null;
+        }
     }
 }

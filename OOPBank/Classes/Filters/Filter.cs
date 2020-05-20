@@ -2,7 +2,7 @@
 
 namespace OOPBank.Classes.Filters
 {
-    public class Filter
+    public class Filter : IFilterVisitor
     {
         public virtual int OperationsLimit { get; }
         public virtual OperationType Type { get; }
@@ -28,6 +28,9 @@ namespace OOPBank.Classes.Filters
         {
             Console.WriteLine("Filter: showing " + OperationsLimit + " operations of type: " + Type);
         }
-
+        public Operation VisitOperation(Operation operation)
+        {
+            return operation;
+        }
     }
 }

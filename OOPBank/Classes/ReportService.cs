@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Buffers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using OOPBank.Classes.Filters;
@@ -10,19 +11,18 @@ namespace OOPBank.Classes
 
         public static Report generateReport(Account account, Filter filter)
         {
-            var operations = filterType(account, filter);
+            var allOperations = new List<Operation>();
+            var operations = new List<Operation>();
+            allOperations.AddRange(account.IncomingOperations);
+            allOperations.AddRange(account.OutgoingOperations);
 
-            switch (filter)
+            foreach (var operation in allOperations)
             {
-                case AccountFilter accountFilter:
-                    operations = filterAccount(operations, accountFilter);
-                    break;
-                case AmountFilter amountFilter:
-                    operations = filterAmount(operations, amountFilter);
-                    break;
-                case DateFilter dateFilter:
-                    operations = filterDate(operations, dateFilter);
-                    break;
+                var op = operation.acceptFilter(filter);
+                if (op is Operation cop)
+                {
+                    operations.Add(cop);
+                }
             }
 
             operations = operations.OrderByDescending(o => o.DateOfExecution).ToList(); //latest first

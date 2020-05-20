@@ -1,8 +1,9 @@
 using System;
+using OOPBank.Classes.Filters;
 
 namespace OOPBank.Classes
 {
-    public class Operation
+    public class Operation : IFilterableElement
     {
         public virtual DateTime DateOfExecution { get; }
         public virtual Account FromAccount { get; }
@@ -62,6 +63,11 @@ namespace OOPBank.Classes
         public void setOperationStatus(OperationStatus status)
         {
             this.status = status;
+        }
+
+        public IFilterableElement acceptFilter(IFilterVisitor filter)
+        {
+            return filter.VisitOperation(this);
         }
     }
 }
