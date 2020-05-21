@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using OOPBank.Classes;
 using OOPBank.Classes.IBPA;
+using OOPBank.Classes.OperationExecuting;
 using OOPBank.Classes.Operations;
 
 namespace OOPBank
@@ -16,6 +17,7 @@ namespace OOPBank
                 Console.Write("\n\n");
             }
 
+            var OperationExecutor = new OperationExecutor();
             var Bank1 = new Bank("Bank1", "B1");
             var SuperBank = new Bank("SuperBank", "SB");
             var JohnDoe = new Customer("John", "Doe");
@@ -24,9 +26,9 @@ namespace OOPBank
             Bank1.addCustomer(JohnDoe);
             SuperBank.addCustomer(AndrewSmith);
 
-            new OpenDebitAccount(JohnDoe, Bank1, new Money(1000, 99), new Money(111, 43)).Execute();
-            new OpenDepositAccount(JohnDoe, Bank1, new Money(1000, 12), new Money(234, 53)).Execute();
-            new OpenLoanAccount(JohnDoe, Bank1, new Money(1000, 12), new Money(234, 53)).execute();
+            OperationExecutor.execute(new OpenDebitAccount(JohnDoe, Bank1, new Money(1000, 99), new Money(111, 43)));
+            OperationExecutor.execute(new OpenDepositAccount(JohnDoe, Bank1, new Money(1000, 12), new Money(234, 53)));
+            OperationExecutor.execute(new OpenLoanAccount(JohnDoe, Bank1, new Money(1000, 12), new Money(234, 53)));
             new OpenAccount(AndrewSmith, SuperBank, new Money(2000, 1));
 
 
@@ -36,13 +38,13 @@ namespace OOPBank
             DisplayAccountsDetails(JohnsAccountsList);
             IBPA.processQueuedPayments();
 
-            new Transfer(JohnDoe, Bank1, JohnsAccountsList[0], "SB00000004", new Money(1000, 64)).Execute();
-            new Transfer(JohnDoe, Bank1, JohnsAccountsList[1], "SB00000004", new Money(1000, 64)).Execute();
-            new Transfer(JohnDoe, Bank1, JohnsAccountsList[2], "SB00000004", new Money(1200, 64)).Execute();
+            OperationExecutor.execute(new Transfer(JohnDoe, Bank1, JohnsAccountsList[0], "SB00000004", new Money(1000, 64)));
+            OperationExecutor.execute(new Transfer(JohnDoe, Bank1, JohnsAccountsList[1], "SB00000004", new Money(1000, 64)));
+            OperationExecutor.execute(new Transfer(JohnDoe, Bank1, JohnsAccountsList[2], "SB00000004", new Money(1200, 64)));
 
-            new TakeLoan(JohnDoe, Bank1, JohnsAccountsList[2] as LoanAccount, new Money(400, 99)).Execute();
+            OperationExecutor.execute(new TakeLoan(JohnDoe, Bank1, JohnsAccountsList[2] as LoanAccount, new Money(400, 99)));
             DisplayAccountsDetails(JohnsAccountsList);
-            new ChargeInstallment(JohnDoe, Bank1, JohnsAccountsList[2] as LoanAccount, new Money(400, 99)).Execute();
+            OperationExecutor.execute(new ChargeInstallment(JohnDoe, Bank1, JohnsAccountsList[2] as LoanAccount, new Money(400, 99)));
 
             DisplayAccountsDetails(JohnsAccountsList);
             IBPA.processQueuedPayments();

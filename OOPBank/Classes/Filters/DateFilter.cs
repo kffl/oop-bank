@@ -25,5 +25,14 @@ namespace OOPBank.Classes.Filters
                 "AccountFilter: showing " + OperationsLimit + " operations of type: " + Type + " with dates between " +
                 DateFrom + " and " + DateTo);
         }
+
+        public new Operation VisitOperation(Operation operation)
+        {
+            if (operation.DateOfExecution >= DateFrom && operation.DateOfExecution <= DateTo)
+            {
+                return operation;
+            }
+            return null;
+        }
     }
 }

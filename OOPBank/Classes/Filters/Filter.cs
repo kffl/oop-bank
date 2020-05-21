@@ -2,7 +2,7 @@
 
 namespace OOPBank.Classes.Filters
 {
-    public class Filter
+    public class Filter : IFilterVisitor
     {
         public enum OperationType
         {
@@ -30,6 +30,10 @@ namespace OOPBank.Classes.Filters
         public virtual void showDetails()
         {
             Console.WriteLine("Filter: showing " + OperationsLimit + " operations of type: " + Type);
+        }
+        public Operation VisitOperation(Operation operation)
+        {
+            return operation;
         }
     }
 }
