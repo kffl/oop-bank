@@ -4,15 +4,20 @@ namespace OOPBank.Classes
 {
     public class Account
     {
+        public Account()
+        {
+        }
         public Account(string number)
         {
-            accountNumber = number;
+            AccountNumber = number;
         }
 
-        public Account() { }
+        public virtual string AccountNumber { get; }
 
-        public virtual string accountNumber { get; }
         public virtual List<Operation> IncomingOperations { get; } = new List<Operation>();
+
         public virtual List<Operation> OutgoingOperations { get; } = new List<Operation>();
+
+        public virtual List<Operation> OtherOperations { get; } = new List<Operation>();
     }
 }
