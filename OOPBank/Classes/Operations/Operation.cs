@@ -4,12 +4,13 @@ using OOPBank.Classes.Filters;
 
 namespace OOPBank
 {
-    public abstract class Operation : ICommand, IFilterableElement
+    public abstract class Operation : IFilterableElement
     {
         public virtual DateTime DateOfExecution { get; set; }
         public virtual Account FromAccount { get; set; }
         public virtual Account ToAccount { get; }
         public virtual Money Money { get; set; }
+        public OperationStatus Status { get; set; }
 
         protected long ID;
         private static long lastId = 0;
@@ -25,16 +26,9 @@ namespace OOPBank
             Completed
         }
 
-        protected OperationStatus status;
-
         public Operation()
         {
             ID = lastId++;
-        }
-
-        public virtual void Execute()
-        {
-            DateOfExecution = new DateTime();
         }
 
         public virtual void displayOperationDetails()
@@ -50,7 +44,7 @@ namespace OOPBank
 
         public void setOperationStatus(OperationStatus status)
         {
-            this.status = status;
+            this.Status = status;
         }
 
         public virtual IFilterableElement acceptFilter(IFilterVisitor filter)
