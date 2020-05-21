@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using OOPBank.Classes.Operations;
 
 namespace OOPBank.Classes.IBPA
 {
@@ -17,29 +18,34 @@ namespace OOPBank.Classes.IBPA
             public enum PaymentStatus
             {
                 InTransfer,
-                Failed
+                Failed,
+                Completed
             }
             public PaymentStatus status { get; set; }
-            public InterBankPayment(string fromAccountNumber, IBankColleague fromBank, string toAccountNumber, IBankColleague toBank, Money amount)
+            private readonly Transfer transfer;
+
+            public InterBankPayment(Transfer transfer, IBankColleague toBank)
             {
-                this.fromAccountNumber = fromAccountNumber;
-                this.fromBank = fromBank;
-                this.toAccountNumber = toAccountNumber;
+                this.transfer = transfer;
                 this.toBank = toBank;
-                this.amount = amount;
                 status = PaymentStatus.InTransfer;
                 ID = ++IBPCounter;
             }
             public void processPayment()
             {
-                var result = toBank.handleIncomingPayment(fromAccountNumber, toAccountNumber, amount);
-                if (result)
+                var toAccount = toBank.getAccounts().Find(a => a.AccountNumber == transfer.toAccountNumber);
+                if (toAccount == null)
                 {
-                    fromBank.handleConfirmation(ID);
+                    transfer.setOperationStatus(Operation.OperationStatus.Rejected);
+                    status = PaymentStatus.Failed;
+                    (transfer.FromAccount as LocalAccount).increaseBalance(transfer.Money);
                 }
                 else
                 {
-                    fromBank.handlePaymentFailure(ID);
+                    toAccount.increaseBalance(transfer.Money);
+                    toAccount.IncomingOperations.Add(transfer);
+                    transfer.setOperationStatus(Operation.OperationStatus.Completed);
+                    status = PaymentStatus.Completed;
                 }
             }
         }
@@ -52,15 +58,11 @@ namespace OOPBank.Classes.IBPA
         //Singleton
         private InterBankPaymentAgency()
         {
-
         }
 
         public static InterBankPaymentAgency getInterBankPaymentAgency()
         {
-            if (Agency == null)
-            {
-                Agency = new InterBankPaymentAgency();
-            }
+            if (Agency == null) Agency = new InterBankPaymentAgency();
             return Agency;
         }
 
@@ -69,16 +71,12 @@ namespace OOPBank.Classes.IBPA
             banks.Add(bank);
         }
 
-        public long performInterBankTransfer(string fromAccountNumber, IBankColleague fromBank, string toAccountNumber, Money amount)
+        public void performInterBankTransfer(Transfer transfer)
         {
-            var toBank = banks.Find(b => toAccountNumber.StartsWith(b.accountPrefix));
-            if (toBank == null)
-            {
-                throw new Exception("Recipients bank not found");
-            }
-            var payment = new InterBankPayment(fromAccountNumber, fromBank, toAccountNumber, toBank, amount);
+            var toBank = banks.Find(b => transfer.toAccountNumber.StartsWith(b.accountPrefix));
+            if (toBank == null) throw new Exception("Recipients bank not found");
+            var payment = new InterBankPayment(transfer, toBank);
             queuedPayments.Enqueue(payment);
-            return payment.ID;
         }
 
         public void processQueuedPayments()
@@ -90,6 +88,5 @@ namespace OOPBank.Classes.IBPA
                 completedPayments.Add(payment);
             }
         }
-
     }
 }

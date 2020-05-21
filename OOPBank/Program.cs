@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using OOPBank.Classes;
 using OOPBank.Classes.IBPA;
+using OOPBank.Classes.Operations;
 
 namespace OOPBank
 {
@@ -9,7 +10,7 @@ namespace OOPBank
     {
         private static void Main(string[] args)
         {
-            static void displayAccountsDetails(List<LocalAccount> accounts)
+            static void DisplayAccountsDetails(List<LocalAccount> accounts)
             {
                 foreach (var account in accounts) account.displayAccountDetails();
                 Console.Write("\n\n");
@@ -23,36 +24,34 @@ namespace OOPBank
             Bank1.addCustomer(JohnDoe);
             SuperBank.addCustomer(AndrewSmith);
 
-            var JohnsDebitAccount = Bank1.openDebitAccount(JohnDoe, new Money(5000, 99), new Money(111, 43));
-            var JohnsLoanAccount = Bank1.openLoanAccount(JohnDoe, new Money(99000, 12), new Money(234, 53));
-            var JohnsDepositAccount = Bank1.openDepositAccount(JohnDoe, new Money(1000, 6), new Money(1230, 64), 1);
-            var AndrewSmithsAccount = SuperBank.openAccount(AndrewSmith, new Money(2000, 1));
-            var accounts = new List<LocalAccount>
-            {
-                JohnsDebitAccount,
-                JohnsLoanAccount,
-                JohnsDepositAccount,
-                AndrewSmithsAccount
-            };
+            new OpenDebitAccount(JohnDoe, Bank1, new Money(1000, 99), new Money(111, 43)).Execute();
+            new OpenDepositAccount(JohnDoe, Bank1, new Money(1000, 12), new Money(234, 53)).Execute();
+            new OpenLoanAccount(JohnDoe, Bank1, new Money(1000, 12), new Money(234, 53)).execute();
+            new OpenAccount(AndrewSmith, SuperBank, new Money(2000, 1));
 
-            displayAccountsDetails(accounts);
+
+            var JohnsAccountsList = Bank1.getCustomerAccounts(JohnDoe);
+            DisplayAccountsDetails(JohnsAccountsList);
             Bank1.simulateNewDay();
+            DisplayAccountsDetails(JohnsAccountsList);
             IBPA.processQueuedPayments();
-            displayAccountsDetails(accounts);
 
-            Bank1.makeTransfer(JohnDoe, JohnsDebitAccount, "SB00000004", new Money(1050, 64));
-            Bank1.makeTransfer(JohnDoe, JohnsDebitAccount, JohnsLoanAccount.accountNumber, new Money(1300));
-            Bank1.chargeInstallment(JohnDoe, JohnsLoanAccount, new Money(100, 73));
-            Bank1.takeLoan(JohnDoe, JohnsLoanAccount, new Money(400, 99));
+            new Transfer(JohnDoe, Bank1, JohnsAccountsList[0], "SB00000004", new Money(1000, 64)).Execute();
+            new Transfer(JohnDoe, Bank1, JohnsAccountsList[1], "SB00000004", new Money(1000, 64)).Execute();
+            new Transfer(JohnDoe, Bank1, JohnsAccountsList[2], "SB00000004", new Money(1200, 64)).Execute();
 
-            displayAccountsDetails(accounts);
+            new TakeLoan(JohnDoe, Bank1, JohnsAccountsList[2] as LoanAccount, new Money(400, 99)).Execute();
+            DisplayAccountsDetails(JohnsAccountsList);
+            new ChargeInstallment(JohnDoe, Bank1, JohnsAccountsList[2] as LoanAccount, new Money(400, 99)).Execute();
+
+            DisplayAccountsDetails(JohnsAccountsList);
             IBPA.processQueuedPayments();
             Bank1.simulateNewDay();
-            displayAccountsDetails(accounts);
+            DisplayAccountsDetails(JohnsAccountsList);
 
-            JohnsDebitAccount.displayHistory();
+            JohnsAccountsList[2].displayHistory();
             Console.Write("\n");
-            AndrewSmithsAccount.displayHistory();
+            //AndrewSmithsAccount.displayHistory();
         }
     }
 }

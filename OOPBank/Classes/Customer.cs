@@ -2,13 +2,14 @@ namespace OOPBank.Classes
 {
     public class Customer
     {
-        public string firstName { get; }
-        public string fastName { get; }
-
         public Customer(string firstName, string lastName)
         {
-            this.firstName = firstName;
-            this.fastName = lastName;
+            FirstName = firstName;
+            FastName = lastName;
         }
+
+        public string FirstName { get; }
+
+        public string FastName { get; }
     }
 }

@@ -4,13 +4,12 @@ namespace OOPBank.Classes.Filters
 {
     public class Filter : IFilterVisitor
     {
-        public virtual int OperationsLimit { get; }
-        public virtual OperationType Type { get; }
-
         public enum OperationType
         {
             Incoming,
+
             Outgoing,
+
             All
         }
 
@@ -23,6 +22,10 @@ namespace OOPBank.Classes.Filters
             OperationsLimit = operationsLimit;
             Type = type;
         }
+
+        public virtual int OperationsLimit { get; }
+
+        public virtual OperationType Type { get; }
 
         public virtual void showDetails()
         {
