@@ -1,14 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using OOPBank.Classes.Operations;
 
 namespace OOPBank.Classes.OperationExecuting
 {
-    class OpenLoanAccountHandler : IOperationHandler
+    class OpenLoanAccountHandler : OperationHandler
     {
-        public void execute(Operation operation)
+        public OpenLoanAccountHandler(OperationHandler nextHandler) : base(nextHandler)
         {
-            throw new NotImplementedException();
+        }
+        public override void handle(Operation operation)
+        {
+            if (operation is OpenLoanAccount specificOp)
+            {
+                execute(specificOp);
+            }
+            passToNext(operation);
+        }
+
+        private void execute(OpenLoanAccount operation)
+        {
+            if (operation.startingLoan <= 0) throw new Exception("Loan amount has to be greater than 0.");
+            var newAccount = new LoanAccount(
+                operation.customer,
+                operation.bank.generateAccountNumber(),
+                operation.Money ?? new Money(),
+                operation.startingLoan ?? new Money()
+            );
+            operation.bank.addAccount(newAccount);
+            newAccount.OtherOperations.Add(operation);
         }
     }
 }

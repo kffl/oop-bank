@@ -1,14 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using OOPBank.Classes.Operations;
 
 namespace OOPBank.Classes.OperationExecuting
 {
-    class OpenAccountHandler : IOperationHandler
+    class OpenAccountHandler : OperationHandler
     {
-        public void execute(Operation operation)
+        public OpenAccountHandler(OperationHandler nextHandler) : base(nextHandler)
         {
-            throw new NotImplementedException();
+        }
+
+        public override void handle(Operation operation)
+        {
+            if (operation is OpenAccount specificOp)
+            {
+                execute(specificOp);
+            }
+            passToNext(operation);
+        }
+
+        private void execute(OpenAccount operation)
+        {
+            var newAccount = new LocalAccount(
+                operation.customer,
+                operation.bank.generateAccountNumber(),
+                operation.Money ?? new Money()
+            );
+            operation.bank.addAccount(newAccount);
+            newAccount.OtherOperations.Add(operation);
         }
     }
 }

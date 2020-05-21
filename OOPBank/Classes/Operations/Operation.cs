@@ -3,12 +3,13 @@ using OOPBank.Classes;
 
 namespace OOPBank
 {
-    public abstract class Operation : ICommand
+    public abstract class Operation
     {
         public virtual DateTime DateOfExecution { get; set;  }
         public virtual LocalAccount FromAccount { get; set; }
         public virtual LocalAccount ToAccount { get; }
         public virtual Money Money { get; set; }
+        public OperationStatus Status { get; set; }
 
         protected long ID;
         private static long lastId = 0;
@@ -24,16 +25,9 @@ namespace OOPBank
             Completed
         }
 
-        protected OperationStatus status;
-
         public Operation()
         {
             ID = lastId++;
-        }
-
-        public virtual void Execute()
-        {
-            DateOfExecution = new DateTime();
         }
 
         public virtual void displayOperationDetails()
@@ -49,7 +43,7 @@ namespace OOPBank
 
         public void setOperationStatus(OperationStatus status)
         {
-            this.status = status;
+            this.Status = status;
         }
     }
 }

@@ -4,11 +4,11 @@ namespace OOPBank.Classes.Operations
 {
     internal class OpenLoanAccount : Operation
     {
-        private readonly Bank bank;
+        public readonly Bank bank;
 
-        private readonly Customer customer;
+        public readonly Customer customer;
 
-        private readonly Money startingLoan;
+        public readonly Money startingLoan;
 
         public OpenLoanAccount(Customer customer, Bank bank, Money startingBalance = null,
             Money startingLoan = null)
@@ -17,19 +17,6 @@ namespace OOPBank.Classes.Operations
             this.customer = customer;
             Money = startingBalance;
             this.startingLoan = startingLoan;
-        }
-
-        public void execute()
-        {
-            if (startingLoan <= 0) throw new Exception("Loan amount has to be greater than 0.");
-            var newAccount = new LoanAccount(
-                customer,
-                bank.generateAccountNumber(),
-                Money ?? new Money(),
-                startingLoan ?? new Money()
-            );
-            bank.addAccount(newAccount);
-            newAccount.OtherOperations.Add(this);
         }
 
         public override void displayOperationDetails()

@@ -1,14 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using OOPBank.Classes.Operations;
 
 namespace OOPBank.Classes.OperationExecuting
 {
-    class ChargeInstallmentHandler : IOperationHandler
+    class ChargeInstallmentHandler : OperationHandler
     {
-        public void execute(Operation operation)
+        public ChargeInstallmentHandler(OperationHandler nextHandler) : base(nextHandler)
         {
-            throw new NotImplementedException();
         }
+
+        public override void handle(Operation operation)
+        {
+            if (operation is ChargeInstallment specificOp)
+            {
+                execute(specificOp);
+            }
+            passToNext(operation);
+        }
+
+        private void execute(ChargeInstallment operation)
+        {
+            if (!operation.Bank.getAccounts().Contains(operation.LoanAccount))
+                throw new Exception("This account does not belong to our bank.");
+            if (operation.Money <= 0) throw new Exception("Amount has to be greater than 0.");
+            if (!operation.LoanAccount.hasSufficientBalance(operation.Money)) throw new Exception("Insufficient account balance.");
+            if (operation.LoanAccount.tooMuchTransfer(operation.Money)) throw new Exception("Tried to transfer too much money.");
+
+            operation.LoanAccount.balance -= operation.Money;
+            operation.LoanAccount.loanAmount -= operation.Money;
+            operation.Status = Operation.OperationStatus.Completed;
+            operation.DateOfExecution = new DateTime();
+        }
+
     }
 }
