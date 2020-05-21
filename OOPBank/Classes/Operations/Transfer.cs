@@ -24,33 +24,37 @@ namespace OOPBank.Classes.Operations
 
         public override void Execute()
         {
-            //check if account belongs to this bank
-            if (!bank.getAccounts().Contains(FromAccount))
+            LocalAccount localAccount = (LocalAccount)FromAccount;   //check if account belongs to this bank
+            if (localAccount == null || !bank.getAccounts().Contains(localAccount))
                 throw new Exception("This account does not belong to our bank.");
-            if (Money <= 0) throw new Exception("Amount has to be greater than 0.");
-            if (FromAccount.AccountNumber == toAccountNumber)
-                throw new Exception("Transfer has to be between different accounts.");
-            if (!FromAccount.hasSufficientBalance(Money)) throw new Exception("Insufficient account balance.");
-
-            if (toAccountNumber.StartsWith(bank.accountPrefix))
-            {
-                //it's an internal transfer
-                var recipientsAccount = bank.getAccounts().Find(a => a.AccountNumber == toAccountNumber);
-                if (recipientsAccount == null) throw new Exception("Recipient's account not found");
-
-                FromAccount.decreaseBalance(Money);
-                recipientsAccount.increaseBalance(Money);
-                recipientsAccount.IncomingOperations.Add(this);
-                status = OperationStatus.Completed;
-            }
             else
             {
-                //it's an external transfer
-                status = OperationStatus.PendingCompletion;
-                FromAccount.decreaseBalance(Money);
-                FromAccount.OutgoingOperations.Add(this);
-                bank.IBPA.performInterBankTransfer(this);
+                if (Money <= 0) throw new Exception("Amount has to be greater than 0.");
+                if (FromAccount.AccountNumber == toAccountNumber)
+                    throw new Exception("Transfer has to be between different accounts.");
+                if (!localAccount.hasSufficientBalance(Money)) throw new Exception("Insufficient account balance.");
+
+                if (toAccountNumber.StartsWith(bank.accountPrefix))
+                {
+                    //it's an internal transfer
+                    var recipientsAccount = bank.getAccounts().Find(a => a.AccountNumber == toAccountNumber);
+                    if (recipientsAccount == null) throw new Exception("Recipient's account not found");
+
+                    localAccount.decreaseBalance(Money);
+                    recipientsAccount.increaseBalance(Money);
+                    recipientsAccount.IncomingOperations.Add(this);
+                    status = OperationStatus.Completed;
+                }
+                else
+                {
+                    //it's an external transfer
+                    status = OperationStatus.PendingCompletion;
+                    localAccount.decreaseBalance(Money);
+                    localAccount.OutgoingOperations.Add(this);
+                    bank.IBPA.performInterBankTransfer(this);
+                }
             }
+
         }
     }
 }

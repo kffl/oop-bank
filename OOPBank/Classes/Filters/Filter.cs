@@ -2,7 +2,7 @@
 
 namespace OOPBank.Classes.Filters
 {
-    public class Filter : IFilterVisitor
+    public abstract class Filter : IFilterVisitor
     {
         public enum OperationType
         {

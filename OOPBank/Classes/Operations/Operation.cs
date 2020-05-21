@@ -7,8 +7,8 @@ namespace OOPBank
     public abstract class Operation : ICommand, IFilterableElement
     {
         public virtual DateTime DateOfExecution { get; set; }
-        public virtual LocalAccount FromAccount { get; set; }
-        public virtual LocalAccount ToAccount { get; }
+        public virtual Account FromAccount { get; set; }
+        public virtual Account ToAccount { get; }
         public virtual Money Money { get; set; }
 
         protected long ID;
@@ -53,7 +53,7 @@ namespace OOPBank
             this.status = status;
         }
 
-        public IFilterableElement acceptFilter(IFilterVisitor filter)
+        public virtual IFilterableElement acceptFilter(IFilterVisitor filter)
         {
             return filter.VisitOperation(this);
         }
