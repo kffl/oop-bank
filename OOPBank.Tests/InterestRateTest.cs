@@ -23,7 +23,7 @@ namespace OOPBank.Tests
         public void PoorToRichTest()
         {
             var rateBeforeOperation = account.InterestRate;
-            account.bookIncomingOperation(operation.Object);
+            account.IncomingOperations.Add(operation.Object);
             Assert.LessOrEqual(rateBeforeOperation, account.InterestRate);
         }
 
@@ -31,7 +31,7 @@ namespace OOPBank.Tests
         public void RichToPoorTest()
         {
             var rateBeforeOperation = account.InterestRate;
-            account.bookOutgoingOperation(operation.Object);
+            account.OutgoingOperations.Add(operation.Object);
             Assert.GreaterOrEqual(rateBeforeOperation, account.InterestRate);
         }
     }

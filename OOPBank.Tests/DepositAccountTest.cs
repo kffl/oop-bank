@@ -21,22 +21,6 @@ namespace OOPBank.Tests
                 new Money(100), 1);
         }
 
-        [SetUp]
-        public void Setup()
-        {
-            Account1 = new Mock<Account>();
-            Account1.Setup(t => t.AccountNumber).Returns("1");
-
-            Account2 = new Mock<Account>();
-            Account2.Setup(t => t.AccountNumber).Returns("2");
-
-            mockOp = new Mock<Operation>();
-            mockOp.Setup(t => t.DateOfExecution).Returns(new DateTime(2020, 04, 01));
-            mockOp.Setup(t => t.FromAccount).Returns(Account1.Object);
-            mockOp.Setup(t => t.ToAccount).Returns(Account2.Object);
-            mockOp.Setup(t => t.Money).Returns(new Money(100));
-        }
-
         [Test]
         public void ConstructorExceptionTest()
         {
@@ -53,13 +37,15 @@ namespace OOPBank.Tests
         [Test]
         public void DepositOperationsTest()
         {
-            DepositAccount1.bookIncomingOperation(mockOp.Object);
+            DepositAccount1.increaseBalance(new Money(100));
             Assert.AreEqual(200, DepositAccount1.balance.asDouble);
-            DepositAccount1.bookOutgoingOperation(mockOp.Object);
-            DepositAccount1.bookOutgoingOperation(mockOp.Object);
+            Assert.AreEqual(100, DepositAccount1.depositAmount.asDouble);
+            DepositAccount1.decreaseBalance(new Money(200));
             Assert.AreEqual(0, DepositAccount1.balance.asDouble);
-            DepositAccount1.bookOutgoingOperation(mockOp.Object);
+            Assert.AreEqual(100, DepositAccount1.depositAmount.asDouble);
+            DepositAccount1.decreaseBalance(new Money(100));
             Assert.AreEqual(0, DepositAccount1.balance.asDouble);
+            Assert.AreEqual(0, DepositAccount1.depositAmount.asDouble);
         }
 
         [Test]

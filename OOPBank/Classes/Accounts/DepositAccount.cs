@@ -8,7 +8,7 @@ namespace OOPBank.Classes
 
         private int daysPassed;
 
-        private Money depositAmount;
+        public Money depositAmount;
 
         private int depositsWithdraws;
 

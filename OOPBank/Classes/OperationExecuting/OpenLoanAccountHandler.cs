@@ -21,7 +21,6 @@ namespace OOPBank.Classes.OperationExecuting
 
         private void execute(OpenLoanAccount operation)
         {
-            if (operation.startingLoan <= 0) throw new Exception("Loan amount has to be greater than 0.");
             var newAccount = new LoanAccount(
                 operation.customer,
                 operation.bank.generateAccountNumber(),

@@ -9,6 +9,7 @@ namespace OOPBank.Classes
         public DebitAccount(Customer owner, string number, Money startingBalance, Money debitLimitation) : base(
             owner, number, startingBalance)
         {
+            if (debitLimitation <= 0) throw new Exception("Debt limitation has to be greater than 0.");
             debitLimit = new Money(debitLimitation.dollars, debitLimitation.cents);
         }
 

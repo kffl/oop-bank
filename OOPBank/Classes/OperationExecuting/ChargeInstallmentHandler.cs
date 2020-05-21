@@ -26,8 +26,7 @@ namespace OOPBank.Classes.OperationExecuting
             if (!operation.LoanAccount.hasSufficientBalance(operation.Money)) throw new Exception("Insufficient account balance.");
             if (operation.LoanAccount.tooMuchTransfer(operation.Money)) throw new Exception("Tried to transfer too much money.");
 
-            operation.LoanAccount.balance -= operation.Money;
-            operation.LoanAccount.loanAmount -= operation.Money;
+            operation.LoanAccount.chargeInstallment(operation.Money);
             operation.Status = Operation.OperationStatus.Completed;
             operation.DateOfExecution = new DateTime();
         }

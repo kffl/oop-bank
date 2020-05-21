@@ -13,6 +13,7 @@ namespace OOPBank.Classes
             owner, number,
             startingBalance + loanAmount)
         {
+            if (loanAmount <= 0) throw new Exception("Loan amount has to be greater than 0.");
             this.loanAmount = new Money(loanAmount.dollars, loanAmount.cents);
         }
 
@@ -21,6 +22,11 @@ namespace OOPBank.Classes
             return loanAmount - money < 0;
         }
 
+        public void chargeInstallment(Money money)
+        {
+            balance -= money;
+            loanAmount -= money;
+        }
         public override void handleNewDay()
         {
             var capitalization = loanAmount * (InterestRate + interestRate.loanInterestConstant);

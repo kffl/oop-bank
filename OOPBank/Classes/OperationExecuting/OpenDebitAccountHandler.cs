@@ -22,7 +22,6 @@ namespace OOPBank.Classes.OperationExecuting
 
         private void execute(OpenDebitAccount operation)
         {
-            if (operation.startingDebit <= 0) throw new Exception("Debt limitation has to be greater than 0.");
             var newAccount = new DebitAccount(
                 operation.customer,
                 operation.bank.generateAccountNumber(),
