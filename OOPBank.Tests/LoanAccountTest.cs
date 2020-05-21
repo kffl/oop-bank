@@ -24,10 +24,10 @@ namespace OOPBank.Tests
         public void Setup()
         {
             Account1 = new Mock<Account>();
-            Account1.Setup(t => t.accountNumber).Returns("1");
+            Account1.Setup(t => t.AccountNumber).Returns("1");
 
             Account2 = new Mock<Account>();
-            Account2.Setup(t => t.accountNumber).Returns("2");
+            Account2.Setup(t => t.AccountNumber).Returns("2");
 
             mockOp = new Mock<Operation>();
             mockOp.Setup(t => t.DateOfExecution).Returns(new DateTime(2020, 04, 01));
