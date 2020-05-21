@@ -4,11 +4,11 @@ namespace OOPBank.Classes.Operations
 {
     internal class OpenDebitAccount : Operation
     {
-        private readonly Bank bank;
+        public readonly Bank bank;
 
-        private readonly Customer customer;
+        public readonly Customer customer;
 
-        private readonly Money startingDebit;
+        public readonly Money startingDebit;
 
         public OpenDebitAccount(Customer customer, Bank bank, Money startingBalance = null,
             Money startingDebit = null)
@@ -17,19 +17,6 @@ namespace OOPBank.Classes.Operations
             this.customer = customer;
             Money = startingBalance;
             this.startingDebit = startingDebit;
-        }
-
-        public override void Execute()
-        {
-            if (startingDebit <= 0) throw new Exception("Debt limitation has to be greater than 0.");
-            var newAccount = new DebitAccount(
-                customer,
-                bank.generateAccountNumber(),
-                Money ?? new Money(),
-                startingDebit ?? new Money()
-            );
-            bank.addAccount(newAccount);
-            newAccount.OtherOperations.Add(this);
         }
 
         public override void displayOperationDetails()
