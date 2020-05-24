@@ -53,7 +53,7 @@ namespace OOPBank.IBPA
         private List<InterBankPayment> completedPayments = new List<InterBankPayment>();
         private Queue<InterBankPayment> queuedPayments = new Queue<InterBankPayment>();
         private static InterBankPaymentAgency Agency;
-        private List<IBankColleague> banks = new List<IBankColleague>();
+        public List<IBankColleague> banks { get; private set; } = new List<IBankColleague>();
 
         //Singleton
         private InterBankPaymentAgency()
@@ -74,7 +74,7 @@ namespace OOPBank.IBPA
         public void performInterBankTransfer(Transfer transfer)
         {
             var toBank = banks.Find(b => transfer.toAccountNumber.StartsWith(b.accountPrefix));
-            if (toBank == null) throw new Exception("Recipients bank not found");
+            if (toBank == null) throw new ArgumentException("Recipients bank not found");
             var payment = new InterBankPayment(transfer, toBank);
             queuedPayments.Enqueue(payment);
         }

@@ -1,7 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using OOPBank;
-using OOPBank;
+﻿using NUnit.Framework;
 
 namespace OOPBank.Tests
 {

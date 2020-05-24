@@ -3,6 +3,7 @@ using Moq;
 using OOPBank;
 using OOPBank.IBPA;
 using NUnit.Framework;
+using OOPBank.Operations;
 
 namespace OOPBank.Tests
 {
@@ -18,11 +19,9 @@ namespace OOPBank.Tests
         {
             Bank1 = new Mock<IBankColleague>();
             Bank1.SetupGet(t => t.accountPrefix).Returns("B1");
-            //Bank1.Setup(t => t.handleConfirmation(1));
+
             Bank2 = new Mock<IBankColleague>();
             Bank2.SetupGet(t => t.accountPrefix).Returns("B2");
-            //Bank2.Setup(t => t.handleIncomingPayment("B10000000001", "B20000000001", It.IsAny<Money>())).Returns(true);
-            //Bank2.Setup(t => t.handleIncomingPayment("B10000000001", "B20000000002", It.IsAny<Money>())).Returns(false);
 
             IBPA = InterBankPaymentAgency.getInterBankPaymentAgency();
             IBPA.registerBank(Bank1.Object);
@@ -36,6 +35,16 @@ namespace OOPBank.Tests
             var IBPA2 = InterBankPaymentAgency.getInterBankPaymentAgency();
 
             Assert.AreSame(IBPA1, IBPA2);
+        }
+
+        [Test]
+        public void RegisterBankTest()
+        {
+            var IBPA = InterBankPaymentAgency.getInterBankPaymentAgency();
+            var bank = new Mock<IBankColleague>();
+            bank.Setup(b => b.accountPrefix).Returns("B1");
+            IBPA.registerBank(bank.Object);
+            Assert.Contains(bank.Object, IBPA.banks);
         }
 
         /*

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using OOPBank;
 using OOPBank.Filters;
 using static OOPBank.Filters.Filter;
 

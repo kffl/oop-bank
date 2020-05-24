@@ -1,7 +1,5 @@
-﻿using System;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
-using OOPBank;
 
 namespace OOPBank.Tests
 {
