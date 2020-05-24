@@ -1,7 +1,7 @@
 using System;
 using Moq;
-using OOPBank.Classes;
-using OOPBank.Classes.IBPA;
+using OOPBank;
+using OOPBank.IBPA;
 using NUnit.Framework;
 
 namespace OOPBank.Tests
@@ -12,7 +12,7 @@ namespace OOPBank.Tests
         private InterBankPaymentAgency IBPA;
         private Mock<IBankColleague> Bank1;
         private Mock<IBankColleague> Bank2;
-        
+
         [SetUp]
         public void SetUp()
         {

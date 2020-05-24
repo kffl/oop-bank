@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using OOPBank.Classes;
-using OOPBank.Classes.Filters;
+using OOPBank;
+using OOPBank.Filters;
 
 namespace OOPBank.Tests
 {

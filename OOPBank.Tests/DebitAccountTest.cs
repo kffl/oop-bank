@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using OOPBank.Classes;
+using OOPBank;
 
 namespace OOPBank.Tests
 {

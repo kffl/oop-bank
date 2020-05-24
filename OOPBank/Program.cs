@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using OOPBank.Classes;
-using OOPBank.Classes.IBPA;
-using OOPBank.Classes.OperationExecuting;
-using OOPBank.Classes.Operations;
+using OOPBank;
+using OOPBank.IBPA;
+using OOPBank.OperationExecuting;
+using OOPBank.Operations;
 
 namespace OOPBank
 {
