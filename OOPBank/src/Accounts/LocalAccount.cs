@@ -7,7 +7,10 @@ namespace OOPBank
     {
         protected InterestRate.InterestRate interestRate;
         public readonly Customer owner;
-
+        
+        public LocalAccount() : base()
+        {
+        }
 
         public LocalAccount(Customer owner, string number, Money startingBalance) : base(number)
         {

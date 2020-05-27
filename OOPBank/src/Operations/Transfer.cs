@@ -3,18 +3,22 @@ namespace OOPBank.Operations
 {
     public class Transfer : Operation
     {
-        public readonly Bank bank;
+        public virtual Bank Bank { get; }
 
         public readonly Customer customer;
 
-        public readonly string toAccountNumber;
+        public virtual string ToAccountNumber { get; }
+
+        public Transfer()
+        {
+        }
 
         public Transfer(Customer customer, Bank bank, LocalAccount fromAccount, string toAccountNumber, Money amount)
         {
-            this.bank = bank;
+            this.Bank = bank;
             this.customer = customer;
             FromAccount = fromAccount;
-            this.toAccountNumber = toAccountNumber;
+            this.ToAccountNumber = toAccountNumber;
             Money = amount;
             FromAccount.OutgoingOperations.Add(this);
         }

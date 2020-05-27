@@ -14,7 +14,11 @@ namespace OOPBank
 
         public readonly IBankMediator IBPA;
 
-        public string accountPrefix { get; }
+        public virtual string accountPrefix { get; }
+
+        public Bank()
+        {
+        }
 
         public Bank(string name, string accountPrefix)
         {
@@ -36,7 +40,7 @@ namespace OOPBank
 
         public string Name { get; }
 
-        public List<LocalAccount> getAccounts()
+        public virtual List<LocalAccount> getAccounts()
         {
             return accounts;
         }

@@ -33,7 +33,7 @@ namespace OOPBank.IBPA
             }
             public void processPayment()
             {
-                var toAccount = toBank.getAccounts().Find(a => a.AccountNumber == transfer.toAccountNumber);
+                var toAccount = toBank.getAccounts().Find(a => a.AccountNumber == transfer.ToAccountNumber);
                 if (toAccount == null)
                 {
                     transfer.setOperationStatus(Operation.OperationStatus.Rejected);
@@ -73,7 +73,7 @@ namespace OOPBank.IBPA
 
         public void performInterBankTransfer(Transfer transfer)
         {
-            var toBank = banks.Find(b => transfer.toAccountNumber.StartsWith(b.accountPrefix));
+            var toBank = banks.Find(b => transfer.ToAccountNumber.StartsWith(b.accountPrefix));
             if (toBank == null) throw new ArgumentException("Recipients bank not found");
             var payment = new InterBankPayment(transfer, toBank);
             queuedPayments.Enqueue(payment);
